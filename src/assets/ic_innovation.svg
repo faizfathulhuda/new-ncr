@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="22.32 20 15 20">
+    <title>18639DE5-C5F1-4089-BF2A-859557E55295@1,5x</title>
+    <defs>
+        <filter x="-135.0%" y="-135.0%" width="370.0%" height="370.0%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="5" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation="4.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0.450980392   0 0 0 0 0.478431373   0 0 0 0 0.945098039  0 0 0 0.396661932 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"/>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="design" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Innovation---list" transform="translate(-8.000000, -163.000000)">
+            <g id="Icons/16px/Dashboard" filter="url(#filter-1)" transform="translate(28.000000, 183.000000)">
+                <g id="bulb-61" transform="translate(2.321429, 0.000000)">
+                    <path d="M15,7.5 C15,3.375 11.625,0 7.5,0 C3.375,0 0,3.375 0,7.5 C0,10.25 1.5,12.75 3.75,14 L3.75,16.25 L11.25,16.25 L11.25,14 C13.5,12.75 15,10.25 15,7.5 Z" id="Combined-Shape" fill="#FFFFFF" fill-rule="nonzero"/>
+                    <path d="M6.25,20 L8.75,20 C10.125,20 11.25,18.875 11.25,17.5 L3.75,17.5 C3.75,18.875 4.875,20 6.25,20 Z" id="Path" fill="#FCD035"/>
+                </g>
+                <rect id="Rectangle" x="0" y="0" width="20" height="20"/>
+            </g>
+        </g>
+    </g>
+</svg>

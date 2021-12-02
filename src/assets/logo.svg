@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>C8F08968-8EDB-45A0-B3D1-2F77EEDB20E0@1,5x</title>
+    <defs>
+        <linearGradient x1="100%" y1="0%" x2="0%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#A2A6F6" offset="0%"></stop>
+            <stop stop-color="#737AF1" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="design" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Innovation---list-scroll-right" transform="translate(-22.000000, -24.000000)" fill-rule="nonzero">
+            <g id="Logo" transform="translate(22.000000, 24.000000)">
+                <rect id="Rectangle" fill="url(#linearGradient-1)" x="0" y="0" width="40" height="40" rx="12"></rect>
+                <g id="Icons" transform="translate(12.000000, 9.000000)" fill="#FFCF5C">
+                    <g id="bulb-61" transform="translate(0.125000, 0.500000)">
+                        <path d="M11.8125,18.375 C11.8125,19.81875 10.63125,21 9.1875,21 L9.1875,21 L6.5625,21 C5.11875,21 3.9375,19.81875 3.9375,18.375 L3.9375,18.375 Z M7.875,0 C12.20625,0 15.75,3.54375 15.75,7.875 C15.75,10.7625 14.175,13.3875 11.8125,14.7 L11.8125,14.7 L11.8125,17.0625 L3.9375,17.0625 L3.9375,14.7 C1.575,13.3875 0,10.7625 0,7.875 C0,3.54375 3.54375,0 7.875,0 Z" id="Combined-Shape"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

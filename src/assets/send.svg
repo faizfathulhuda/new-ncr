@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>993E774D-00B0-4227-B3A7-25BF9AB062D3@1,5x</title>
+    <defs>
+        <path d="M269.80351,10.1964901 C269.60624,9.99922025 269.365132,9.9553825 269.145944,10.043058 L254.39454,15.9611546 C254.153432,16.0488301 254,16.3118566 254,16.5529643 C254,16.7940719 254.19727,17.0351796 254.438378,17.1228551 L260.904446,19.1174728 L262.899064,25.5616225 C262.96482,25.8027301 263.184009,25.9780811 263.468955,26 L263.490873,26 C263.731981,26 263.95117,25.8465679 264.060764,25.6054602 L269.956942,10.8540564 C270.044618,10.6348677 270.00078,10.3718411 269.80351,10.1964901 Z" id="path-1"></path>
+        <filter x="-31.2%" y="-25.0%" width="162.5%" height="162.5%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.337254902   0 0 0 0 0.360784314   0 0 0 0 0.796078431  0 0 0 0.698016827 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="design" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="G0-Registration-Form-User---filled---Category-Project-Team" transform="translate(-1291.000000, -687.000000)" fill-rule="nonzero">
+            <g id="send" transform="translate(1040.000000, 679.000000)">
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <use fill="#7057D2" xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>
