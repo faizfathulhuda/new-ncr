@@ -8,7 +8,6 @@
 // import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: 'App'
   // components: {
   //   HelloWorld
   // }
@@ -19,14 +18,14 @@ export default {
 @import '~material-colors/dist/colors.scss';
 @import '~material-colors/dist/colors.var';
 
-$primary: $md-amber-600;
+$primary: #737AF1;
 
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-vue/src/index.scss';
 @import "~vue-select/src/scss/vue-select.scss";
 
 :root {
-  --bg-light-blue: #{lighten($md-blue-50, 5%)};
+  background-color: $primary;
 }
 
 html {
@@ -43,7 +42,7 @@ html {
 }
 
 a {
-  color: #fff;
+  color: $primary;
   cursor: pointer;
 
   &.add-edit {

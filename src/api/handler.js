@@ -2,11 +2,11 @@ import axios from 'axios'
 import router from '@/router'
 
 const instance = axios.create({
-  baseURL: `${process.env.VUE_APP_BACKEND_URL}`,
+  baseURL: `${process.env.VUE_APP_BACKEND_URL}/api`,
   timeout: 50000
 })
 const refreshInstance = axios.create({
-  baseURL: `${process.env.VUE_APP_BACKEND_URL}`,
+  baseURL: `${process.env.VUE_APP_BACKEND_URL}/api`,
   timeout: 10000
 })
 

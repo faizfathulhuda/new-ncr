@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-// import dashboard from './dashboard'
+// import { hasPermission } from '@/utils/permissions'
+import dashboard from './dashboard'
 // import suppliers from './suppliers'
 // import products from './products'
 // import supplierCategory from './supplierCategory'
@@ -18,11 +19,7 @@ const routes = [
         path: '',
         redirect: () => '/dashboard'
       },
-      // { ...dashboard },
-      // { ...suppliers },
-      // { ...products },
-      // { ...supplierCategory },
-      // { ...productCategory },
+      { ...dashboard },
       {
         path: '403',
         name: 'Forbidden',
@@ -32,7 +29,7 @@ const routes = [
   },
   {
     path: '/login',
-    component: () => import('@/components/HelloWorld')
+    component: () => import('@/views/Login')
   },
   {
     path: '*',
@@ -47,8 +44,19 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  const NO_REDIRECTS = [
+    '/login',
+    '/dashboard',
+    '/403'
+  ]
+
   if (to.path !== '/login' && !localStorage.getItem('token')) {
+    localStorage.setItem('route', to.fullPath)
     next('/login')
+  } else if (
+    !NO_REDIRECTS.includes(to.path)
+  ) {
+    next('/403')
   } else {
     next()
   }

@@ -1,7 +1,12 @@
 <template>
   <div id="home" class="home">
     <div class="header">
-      <h3 class="p-2 ml-2">AgriT</h3>
+      <img
+      class="mt-2 ml-3"
+        src="@/assets/logo_inoc.png"
+        width="75"
+        height="30"
+      >
       <a
         class="icon d-lg-none mr-auto"
         @click.prevent.stop="setSidebar(!sidebar)"
@@ -13,14 +18,14 @@
         <span>Hi, Admin</span>
       </div>
     </div>
-    <!-- <home-sidebar
+    <home-sidebar
       :active="sidebar"
       :expanded="sidebarExpanded"
       :locked="sidebarLocked"
       @reset="setSidebar"
       @expand="expandSidebar"
       @lock="lockSidebar"
-    /> -->
+    />
     <div
       class="overlay"
       :class="{ 'shown': sidebar }"
@@ -39,11 +44,11 @@
 
 <script>
 import VueScrollTo from 'vue-scrollto'
-// import HomeSidebar from '@/components/HomeSidebar'
+import HomeSidebar from '@/components/HomeSidebar'
 
 export default {
   components: {
-    // HomeSidebar
+    HomeSidebar
   },
 
   data: () => ({
@@ -82,12 +87,12 @@ export default {
   color: #fff;
   display: flex;
   justify-content: space-between;
-  background: var(--md-cyan-800);
+  background: #fff;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .home {
-  background: var(--bg-light-blue);
+  background: #fff;
   bottom: 0;
   left: 0;
   position: fixed;
@@ -116,12 +121,11 @@ export default {
 
 main {
   background-color: #fff;
-  border-bottom-left-radius: 32px;
-  border-bottom-right-radius: 32px;
   margin: 30px 0px 12px 12px;
   padding: 0px 20px 20px 20px;
   overflow: auto;
   transition: 0.3s;
+  height: 100%;
 
   @media screen and (min-width: 992px) {
     margin-left: 230px;
