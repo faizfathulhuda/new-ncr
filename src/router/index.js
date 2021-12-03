@@ -3,10 +3,14 @@ import VueRouter from 'vue-router'
 
 // import { hasPermission } from '@/utils/permissions'
 import dashboard from './dashboard'
-// import suppliers from './suppliers'
-// import products from './products'
-// import supplierCategory from './supplierCategory'
-// import productCategory from './productCategory'
+import externalAudit from './externalAudit'
+import internalAudit from './internalAudit'
+import myDocument from './myDocument'
+import needMyApproval from './needMyApproval'
+import summary from './summary'
+import list from './list'
+import organizationManagement from './organizationManagement'
+import userManagement from './userManagement'
 
 Vue.use(VueRouter)
 
@@ -20,6 +24,14 @@ const routes = [
         redirect: () => '/dashboard'
       },
       { ...dashboard },
+      { ...externalAudit },
+      { ...internalAudit },
+      { ...myDocument },
+      { ...needMyApproval },
+      { ...summary },
+      { ...list },
+      { ...organizationManagement },
+      { ...userManagement },
       {
         path: '403',
         name: 'Forbidden',
@@ -54,7 +66,8 @@ router.beforeEach((to, from, next) => {
     localStorage.setItem('route', to.fullPath)
     next('/login')
   } else if (
-    !NO_REDIRECTS.includes(to.path)
+    !NO_REDIRECTS.includes(to.path) &&
+    !to.meta.permission
   ) {
     next('/403')
   } else {

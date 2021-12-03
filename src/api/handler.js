@@ -12,9 +12,9 @@ const refreshInstance = axios.create({
 
 const refresh = async (originalRequest) => {
   try {
-    const { data } = await refreshInstance.get('/auth/admin/refresh-token', null, {
+    const { data } = await refreshInstance.get('/auth/refresh', null, {
       params: {
-        refresh_token: localStorage.getItem('refreshToken')
+        refreshToken: localStorage.getItem('refreshToken')
       }
     })
     localStorage.setItem('token', data.token)
@@ -33,7 +33,7 @@ const refresh = async (originalRequest) => {
 }
 
 instance.interceptors.request.use(req => {
-  if (req.url !== '/auth/admin/login') {
+  if (req.url !== '/auth/login') {
     req.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
   }
   return req
@@ -42,7 +42,7 @@ instance.interceptors.request.use(req => {
 instance.interceptors.response.use(
   response => response,
   error => {
-    const loginRequest = error.config.url.endsWith('/auth/admin/login')
+    const loginRequest = error.config.url.endsWith('/auth/login')
     const unauthorized = error.response?.status === 401
 
     if (!loginRequest && unauthorized) {
