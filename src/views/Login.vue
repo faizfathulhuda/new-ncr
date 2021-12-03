@@ -138,9 +138,9 @@ export default {
         setTimeout(() => {
           this.$router.push('/dashboard')
         }, 2500)
-      } catch ({ data }) {
+      } catch ({ response }) {
         this.isBusy = false
-        this.error = 'error'
+        this.error = response.data.message.messageEng
       }
     },
     async fetchProfile(id) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="internal">internal audit</div>
+  <div>summary</div>
 </template>
 
 <script>

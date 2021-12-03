@@ -10,127 +10,146 @@
     @mouseleave="onMouseLeave"
   >
     <div class="menus">
-      <router-link
-        class="link text-nowrap"
-        v-for="(menu, m) of menusFiltered"
-        :key="m"
-        :to="menu.path"
-        :exact="menu.exact"
-        @click.stop.native="reset"
-      >
-        <img class="mr-3" src="@/assets/ic_dashboard.svg">
-        <span>
-          {{ menu.text }}
-        </span>
-      </router-link>
-      <div
-        class="link text-nowrap"
-        v-b-toggle.collapse-1
-        @click.stop
-      >
-        <img class="mr-3" src="@/assets/post_add.svg">
-        <span>
-          Create
-        </span>
-      </div>
-      <b-collapse
-        id="collapse-1"
-        class="mt-2 text-nowrap"
-      >
-        <b-card>
-          <router-link
-            class="sub-link"
-            v-for="(menu, m) of menuCreate"
-            :key="m"
-            :to="menu.path"
-            :exact="menu.exact"
-            @click.stop.native="reset"
-          >
+      <div class="p-1 mb-2">
+        <router-link
+          class="link text-nowrap"
+          v-for="(menu, m) of menusFiltered"
+          :key="m"
+          :to="menu.path"
+          :exact="menu.exact"
+          @click.stop.native="reset"
+          @click="selected = null"
+        >
+          <img class="mr-4" src="@/assets/ic_dashboard.svg">
+          <span>
             {{ menu.text }}
-          </router-link>
-        </b-card>
-      </b-collapse>
-      <div
-        class="link text-nowrap"
-        v-b-toggle.collapse-2
-        @click.stop
-      >
-        <img class="mr-3" src="@/assets/file_copy.svg">
-        <span>
-          Document
-        </span>
+          </span>
+        </router-link>
       </div>
-      <b-collapse
-        id="collapse-2"
-        class="mt-2 text-nowrap"
-      >
-        <b-card>
-          <router-link
-            class="sub-link"
-            v-for="(menu, m) of menuDocument"
-            :key="m"
-            :to="menu.path"
-            :exact="menu.exact"
-            @click.stop.native="reset"
+      <div class="mb-2">
+        <div class="p-1" role="tab">
+          <b-button
+            block
+            v-b-toggle.collapes-1
+            variant="primary"
+            class="text-nowrap text-left"
           >
-            {{ menu.text }}
-          </router-link>
-        </b-card>
-      </b-collapse>
-      <div
-        class="link text-nowrap"
-        v-b-toggle.collapse-3
-        @click.stop
-      >
-        <img class="mr-3" src="@/assets/folder_shared.svg">
-        <span>
-          Report
-        </span>
+            <img class="mr-3" src="@/assets/post_add.svg">
+            Create
+          </b-button>
+        </div>
+        <b-collapse
+          id="collapes-1"
+          accordion="my-accordion"
+          role="tabpanel"
+        >
+          <b-card class="mt-2">
+            <router-link
+              class="sub-link"
+              v-for="(menu, m) of menuCreate"
+              :key="m"
+              :to="menu.path"
+              :exact="menu.exact"
+              @click.stop.native="reset"
+            >
+              {{ menu.text }}
+            </router-link>
+          </b-card>
+        </b-collapse>
       </div>
-      <b-collapse
-        id="collapse-3"
-        class="mt-2 text-nowrap"
-      >
-        <b-card>
-          <router-link
-            class="sub-link"
-            v-for="(menu, m) of menuReport"
-            :key="m"
-            :to="menu.path"
-            :exact="menu.exact"
-            @click.stop.native="reset"
+      <div class="mb-2">
+        <div class="p-1" role="tab">
+          <b-button
+            block
+            v-b-toggle.collapes-2
+            variant="primary"
+            class="text-nowrap text-left"
           >
-            {{ menu.text }}
-          </router-link>
-        </b-card>
-      </b-collapse>
-      <div
-        class="link text-nowrap"
-        v-b-toggle.collapse-4
-        @click.stop
-      >
-        <img class="mr-3" src="@/assets/settings.svg">
-        <span>
-          Settings
-        </span>
+            <img class="mr-3" src="@/assets/file_copy.svg">
+            Document
+          </b-button>
+        </div>
+        <b-collapse
+          id="collapes-2"
+          accordion="my-accordion"
+          role="tabpanel"
+        >
+          <b-card class="mt-2">
+            <router-link
+              class="sub-link"
+              v-for="(menu, m) of menuDocument"
+              :key="m"
+              :to="menu.path"
+              :exact="menu.exact"
+              @click.stop.native="reset"
+            >
+              {{ menu.text }}
+            </router-link>
+          </b-card>
+        </b-collapse>
       </div>
-      <b-collapse
-        id="collapse-4"
-        class="mt-2 text-nowrap"
-      >
-        <b-card>
-          <router-link
-            class="sub-link"
-            v-for="(menu, m) of menuSetting"
-            :key="m"
-            :to="menu.path"
-            :exact="menu.exact"
-            @click.stop.native="reset"
+      <div class="mb-2">
+        <div class="p-1" role="tab">
+          <b-button
+            block
+            v-b-toggle.collapes-3
+            variant="primary"
+            class="text-nowrap text-left"
           >
-            {{ menu.text }}
-          </router-link>
-        </b-card>
-      </b-collapse>
+            <img class="mr-3" src="@/assets/folder_shared.svg">
+            Report
+          </b-button>
+        </div>
+        <b-collapse
+          id="collapes-3"
+          accordion="my-accordion"
+          role="tabpanel"
+        >
+          <b-card class="mt-2">
+            <router-link
+              class="sub-link"
+              v-for="(menu, m) of menuReport"
+              :key="m"
+              :to="menu.path"
+              :exact="menu.exact"
+              @click.stop.native="reset"
+            >
+              {{ menu.text }}
+            </router-link>
+          </b-card>
+        </b-collapse>
+      </div>
+      <div class="mb-1">
+        <div class="p-1" role="tab">
+          <b-button
+            block
+            v-b-toggle.collapes-4
+            variant="primary"
+            class="text-nowrap text-left"
+          >
+            <img class="mr-3" src="@/assets/settings.svg">
+            Settings
+          </b-button>
+        </div>
+        <b-collapse
+          id="collapes-4"
+          accordion="my-accordion"
+          role="tabpanel"
+        >
+          <b-card class="mt-2">
+            <router-link
+              class="sub-link"
+              v-for="(menu, m) of menuSetting"
+              :key="m"
+              :to="menu.path"
+              :exact="menu.exact"
+              @click.stop.native="reset"
+            >
+              {{ menu.text }}
+            </router-link>
+          </b-card>
+        </b-collapse>
+      </div>
     </div>
   </aside>
 </template>
@@ -159,6 +178,7 @@ export default {
   },
 
   data: () => ({
+    isLock: null,
     menus: [
       {
         path: '/dashboard',
@@ -168,12 +188,12 @@ export default {
     ],
     menuCreate: [
       {
-        path: '/internal-audit',
+        path: '/internal-audit/create',
         text: 'Internal Audit',
         icon: ''
       },
       {
-        path: '/external-audit',
+        path: '/external-audit/create',
         text: 'External Audit',
         icon: ''
       },
@@ -291,22 +311,6 @@ aside {
   }
 }
 
-.logo {
-  align-items: center;
-  display: block;
-  padding: 15px;
-  margin-left: auto;
-  margin-right: auto;
-
-  img {
-    clip-path: inset(0 60px 0 0);
-  }
-
-  .expanded & img {
-    clip-path: none;
-  }
-}
-
 .menus {
   color: #fff;
   margin-bottom: 20px;
@@ -318,17 +322,11 @@ aside {
   }
 }
 
-.bottom {
-  flex-shrink: 0;
-  margin-top: auto;
-}
-
 .link {
   color: #fff;
   display: block;
   font-size: 14px;
-  margin-bottom: 10px;
-  padding: 10px 15px;
+  padding: 11px;
   position: relative;
   text-decoration: none;
 
@@ -354,18 +352,23 @@ aside {
 .router-link-exact-active {
    background-color: #A2A6F6;
    cursor: pointer;
-   border-radius: 10px;
+   border-radius: .25rem;
  }
 
-.username {
-  color: var(--md-grey-700);
-  font-size: 0.75em;
-  padding: 0 15px;
+.btn-primary:hover {
+  background-color: #A2A6F6;
+  border-color: #A2A6F6;
+}
+
+.btn-primary:focus {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: none;
 }
 
 .card {
   background: var(--primary);
-  border-radius: 15px;
+  border-radius: 10px;
 }
 
 .card-body {
