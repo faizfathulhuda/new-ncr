@@ -1,6 +1,6 @@
 <template>
   <div id="home" class="home">
-    <div class="header">
+    <div class="header shadow">
       <img
         class="ml-3"
         src="@/assets/logo_inoc.png"
@@ -81,7 +81,7 @@
     />
     <main :class="{ 'expanded': !sidebarExpanded }">
       <div>
-        <div class="title mb-5 ml-lg-2 text-uppercase">
+        <div class="title mb-5 ml-lg-2">
           <h4 class="mb-0">{{ title }}</h4>
           <span class="sub-title">{{ title }}</span>
         </div>
@@ -157,7 +157,6 @@ export default {
   justify-content: space-between;
   align-items: center;
   background: #fff;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 @media (min-width: 600px) {
@@ -202,10 +201,10 @@ export default {
 
 main {
   background-color: #F5F6F9;
-  margin: 30px 0px 12px 12px;
-  padding: 0px 20px 20px 20px;
+  margin-left: 12px;
+  padding: 30px 20px 20px 20px;
   transition: 0.3s;
-  height: calc(100% - 106px);
+  height: calc(100% - 66px);
   overflow: auto;
 
   @media screen and (min-width: 992px) {
