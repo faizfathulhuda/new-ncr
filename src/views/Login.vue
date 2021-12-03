@@ -127,20 +127,28 @@ export default {
     },
     async login() {
       try {
-        console.log('asdasdasd')
         this.isBusy = true
         const { data: { data } } = await api.auth.login(this.credentials)
         localStorage.setItem('token', data.token)
         localStorage.setItem('refreshToken', data.refreshToken)
-        localStorage.setItem('profile', JSON.stringify(data.userData))
+        this.fetchProfile(data.userData.id)
 
         this.error = this.$options.data().error
 
-        this.$router.push('/dashboard')
-      } catch ({ response }) {
+        setTimeout(() => {
+          this.$router.push('/dashboard')
+        }, 2500)
+      } catch ({ data }) {
         this.isBusy = false
-        this.error = response.data.error.message
+        this.error = 'error'
       }
+    },
+    async fetchProfile(id) {
+      const { data: { data } } = await api.user.me(id)
+      const response = await api.user.role(id)
+      data.role = response.data.data.roleList
+
+      localStorage.setItem('profile', JSON.stringify(data))
     }
   }
 }

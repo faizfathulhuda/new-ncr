@@ -2,7 +2,7 @@
   <div id="home" class="home">
     <div class="header">
       <img
-      class="mt-2 ml-3"
+        class="ml-3"
         src="@/assets/logo_inoc.png"
         width="75"
         height="30"
@@ -13,9 +13,58 @@
       >
         <fa-icon icon="bars" size="lg" />
       </a>
-      <div class="profile d-flex align-items-center">
-        <fa-icon class="icon-user mr-2" icon="user-circle" />
-        <span>Hi, Admin</span>
+      <div class="d-flex align-items-center mr-2">
+        <img class="pb-2 mr-3" src="@/assets/logo_itm.png" width="40" height="30">
+        <b-dropdown
+          menu-class="shadow"
+          variant="outlane-primary"
+          toggle-class="text-decoration-none"
+          no-caret
+        >
+          <template #button-content>
+            <div class="profile d-flex align-items-center">
+              <b-avatar
+                button
+                variant="secondary"
+                :text="profile.fullname.charAt(0)"
+                class="align-baseline mr-3"
+                size="3rem"
+              >
+              </b-avatar>
+              <div>
+                <span>{{ profile.fullname }}</span>
+                <br>
+                <span class="text-muted">
+                  {{ profile.role.length === 1 ? profile.role[0].name : 'MULTIROLE'}}
+                </span>
+              </div>
+            </div>
+          </template>
+          <b-dropdown-text style="max-width: 350px;">
+            <div class="role d-flex align-items-center">
+              <b-avatar
+                button
+                variant="secondary"
+                :text="profile.fullname.charAt(0)"
+                class="align-baseline mr-3"
+                size="4rem"
+              >
+              </b-avatar>
+              <div>
+                <span>{{ profile.fullname }}</span>
+                <br>
+                <span class="text-muted">{{ profile.email }}</span>
+              </div>
+            </div>
+            <div v-if="profile.role.length != 1" class="role text-muted mt-2">
+              <small>
+                {{ profile.role.map(i => { return i.name }).join(', ') }}
+              </small>
+            </div>
+          </b-dropdown-text>
+          <b-dropdown-divider></b-dropdown-divider>
+          <b-dropdown-item @click="logout">Logout</b-dropdown-item>
+        </b-dropdown>
       </div>
     </div>
     <home-sidebar
@@ -43,6 +92,7 @@
 </template>
 
 <script>
+import api from '@/api'
 import VueScrollTo from 'vue-scrollto'
 import HomeSidebar from '@/components/HomeSidebar'
 
@@ -54,7 +104,8 @@ export default {
   data: () => ({
     sidebar: false,
     sidebarExpanded: false,
-    sidebarLocked: false
+    sidebarLocked: false,
+    profile: JSON.parse(localStorage.getItem('profile'))
   }),
 
   computed: {
@@ -77,6 +128,22 @@ export default {
       VueScrollTo.scrollTo('#dashboard', 500, {
         container: '#dashboard'
       })
+    },
+    async logout() {
+      try {
+        const id = this.profile.id
+        await api.auth.logout({ id: id })
+        localStorage.clear()
+        this.$router.replace('/login')
+      } catch ({ response }) {
+        this.$nextTick(() => {
+          this.$bvToast.toast(`${response.status} ${response.data.error.message}`, {
+            headerClass: 'd-none',
+            solid: true,
+            variant: 'danger'
+          })
+        })
+      }
     }
   }
 }
@@ -84,9 +151,9 @@ export default {
 
 <style lang="scss" scoped>
 .header {
-  color: #fff;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background: #fff;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -128,7 +195,7 @@ main {
   height: 100%;
 
   @media screen and (min-width: 992px) {
-    margin-left: 230px;
+    margin-left: 260px;
 
     &.expanded {
       margin-left: 80px;
@@ -137,8 +204,13 @@ main {
 }
 
 .profile {
-  padding: 10px;
-  background: var(--md-yellow-800);
+  color: #000;
+  font-size: 1rem;
+  padding: 5px;
+}
+
+.role {
+  font-size: 1.3rem;
 }
 
 .icon-user {
@@ -148,9 +220,5 @@ main {
 .icon {
   color: inherit;
   padding: 10px 15px;
-}
-
-.sub-title {
-  color: #1D938C;
 }
 </style>
