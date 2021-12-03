@@ -201,6 +201,7 @@ export default {
 
 main {
   background-color: #F5F6F9;
+  margin-top: 20px;
   margin-left: 12px;
   padding: 30px 20px 20px 20px;
   transition: 0.3s;
