@@ -80,12 +80,14 @@
       :class="{ 'shown': sidebar }"
     />
     <main :class="{ 'expanded': !sidebarExpanded }">
-      <div class="title mb-5 ml-lg-2 text-uppercase">
-        <h4 class="mb-0">{{ title }}</h4>
-        <span class="sub-title">{{ title }}</span>
-      </div>
       <div>
-        <router-view />
+        <div class="title mb-5 ml-lg-2 text-uppercase">
+          <h4 class="mb-0">{{ title }}</h4>
+          <span class="sub-title">{{ title }}</span>
+        </div>
+        <div>
+          <router-view />
+        </div>
       </div>
     </main>
   </div>
@@ -158,8 +160,20 @@ export default {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+@media (min-width: 600px) {
+  .header {
+    min-height: 64px;
+  }
+}
+
+@media (min-width: 0px) and (orientation: landscape) {
+  .header {
+    min-height: 48px;
+  }
+}
+
 .home {
-  background: #fff;
+  background: #F5F6F9;
   bottom: 0;
   left: 0;
   position: fixed;
@@ -187,12 +201,12 @@ export default {
 }
 
 main {
-  background-color: #fff;
+  background-color: #F5F6F9;
   margin: 30px 0px 12px 12px;
   padding: 0px 20px 20px 20px;
-  overflow: auto;
   transition: 0.3s;
-  height: 100%;
+  height: calc(100% - 106px);
+  overflow: auto;
 
   @media screen and (min-width: 992px) {
     margin-left: 260px;
