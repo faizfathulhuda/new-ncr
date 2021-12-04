@@ -14,7 +14,7 @@
         <fa-icon icon="bars" size="lg" />
       </a>
       <div class="d-flex align-items-center mr-2">
-        <img class="pb-2 mr-3" src="@/assets/logo_itm.png" width="40" height="30">
+        <img class="pb-2 mr-3" src="@/assets/logo_itm.png" width="45" height="30">
         <b-dropdown
           menu-class="shadow"
           variant="outlane-primary"

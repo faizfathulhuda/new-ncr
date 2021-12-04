@@ -26,8 +26,15 @@ export default {
       isoStandard: null,
       isoType: null,
       smkpType: null,
-      isoClause: null,
-      evidence: []
+      isoClause: [null],
+      evidence: [],
+      referenceIso: [null],
+      auditorIso: [null],
+      auditorIsoDiv: [null],
+      auditorSmkp: [null],
+      auditorSmkpDiv: [null],
+      auditee: [null],
+      auditeeDiv: [null]
     }
   })
 }
