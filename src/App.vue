@@ -88,10 +88,6 @@ a {
   }
 }
 
-.btn {
-  color: white;
-}
-
 .vue-numeric-input {
   width: 100% !important;
 

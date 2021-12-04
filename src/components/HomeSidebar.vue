@@ -29,10 +29,13 @@
       <div class="mb-2">
         <div class="p-1" role="tab">
           <b-button
+            id="btnCreate"
+            ref="btnCreate1"
             block
             v-b-toggle.collapes-1
             variant="primary"
             class="text-nowrap text-left"
+            @focus="$event.target.blur()"
           >
             <img class="mr-3" src="@/assets/post_add.svg">
             Create
@@ -274,6 +277,12 @@ export default {
     },
     onMouseLeave() {
       if (!this.locked) this.$emit('expand', false)
+    },
+    onClick() {
+      console.log('focus')
+    },
+    onBlur() {
+      console.log('blur')
     }
   }
 }

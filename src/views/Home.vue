@@ -203,7 +203,7 @@ main {
   background-color: #F5F6F9;
   margin-top: 20px;
   margin-left: 12px;
-  padding: 30px 20px 20px 20px;
+  padding: 0px 20px 20px 20px;
   transition: 0.3s;
   height: calc(100% - 66px);
   overflow: auto;
