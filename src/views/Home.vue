@@ -81,7 +81,7 @@
     />
     <main :class="{ 'expanded': !sidebarExpanded }">
       <div>
-        <div class="title mb-5 ml-lg-2">
+        <div class="title mb-4 ml-lg-2">
           <h4 class="mb-0">{{ title }}</h4>
           <span class="sub-title">{{ title }}</span>
         </div>

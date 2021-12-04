@@ -6,40 +6,21 @@
         class="ml-4"
         v-model="form.iso"
       >
-        Internal Audit ISO
-      </b-form-checkbox>
-      <b-form-checkbox
-        class="ml-4"
-        v-model="form.smkp"
-      >
-        Internal Audit SMKP
+        External Audit ISO
       </b-form-checkbox>
     </div>
     <b-row class="mb-3">
-      <b-col v-if="form.iso || form.smkp">
+      <b-col v-if="form.iso">
         <span class="text-uppercase font-weight-bold">ncr number</span>
         <b-card>
           <b-row>
             <b-col v-if="form.iso">
               <b-form-group
-                label="NCR Number Internal Audit ISO"
+                label="NCR Number External Audit ISO"
               >
                 <b-form-input
                   v-model="form.isotext"
-                  placeholder="NCR Number Internal Audit ISO"
-                  disabled
-                  trim
-                >
-                </b-form-input>
-              </b-form-group>
-            </b-col>
-            <b-col v-if="form.smkp">
-              <b-form-group
-                label="NCR Number Internal SMKP"
-              >
-                <b-form-input
-                  v-model="form.smkptext"
-                  placeholder="NCR Number Internal SMKP"
+                  placeholder="NCR Number External Audit ISO"
                   disabled
                   trim
                 >
@@ -122,37 +103,14 @@
                   :value="null"
                   disabled
                 >
-                  Internal Audit ISO
+                  External Audit ISO
                 </b-form-select-option>
               </template>
             </b-form-select>
           </b-form-group>
         </validation-provider>
       </b-col>
-      <b-col v-if="form.smkp">
-        <validation-provider name="NCR Type SMKP" rules="required" v-slot="{ errors }">
-          <b-form-group
-            label-class="text-uppercase font-weight-bold"
-            :invalid-feedback="errors[0]"
-          >
-            <b-form-select
-              v-model="form.smkpType"
-              :options="options"
-              :class="{ 'is-invalid': errors.length }"
-            >
-              <template #first>
-                <b-form-select-option
-                  :value="null"
-                  disabled
-                >
-                  Internal Audit SMKP
-                </b-form-select-option>
-              </template>
-            </b-form-select>
-          </b-form-group>
-        </validation-provider>
-      </b-col>
-      <b-col v-if="!form.iso && !form.smkp" class="mb-3 text-danger">Please choose NCR Source</b-col>
+      <b-col v-if="!form.iso" class="mb-3 text-danger">Please choose NCR Source</b-col>
     </b-row>
     <validation-provider name="detail of nonconformance" rules="required" v-slot="{ errors }">
       <b-form-group
@@ -260,59 +218,6 @@
         </b-col>
       </b-row>
     </div>
-    <div v-if="form.smkp">
-      <div class="d-flex align-items-center justify-content-between mb-2">
-        <span class="font-weight-bold">REFERENCE SMKP</span>
-      </div>
-      <b-row>
-        <b-col>
-          <validation-provider name="Reference ISO" rules="required" v-slot="{ errors }">
-            <b-form-group
-              label-class="text-uppercase font-weight-bold"
-              :invalid-feedback="errors[0]"
-            >
-              <b-form-select
-                v-model="form.isoStandard"
-                :options="options"
-                :class="{ 'is-invalid': errors.length }"
-              >
-                <template #first>
-                  <b-form-select-option
-                    :value="null"
-                    disabled
-                  >
-                    Element
-                  </b-form-select-option>
-                </template>
-              </b-form-select>
-            </b-form-group>
-          </validation-provider>
-        </b-col>
-        <b-col>
-          <validation-provider name="Reference ISO" rules="required" v-slot="{ errors }">
-            <b-form-group
-              label-class="text-uppercase font-weight-bold"
-              :invalid-feedback="errors[0]"
-            >
-              <b-form-select
-                v-model="form.isoClause"
-                :options="options"
-                :class="{ 'is-invalid': errors.length }"
-              >
-                <template #first>
-                  <b-form-select-option
-                    :value="null"
-                    disabled
-                  >
-                    Sub-Element
-                  </b-form-select-option>
-                </template>
-              </b-form-select>
-            </b-form-group>
-          </validation-provider>
-        </b-col>
-      </b-row>
-    </div>
     <div v-if="form.iso">
       <div class="d-flex align-items-center justify-content-between mb-2">
         <span class="font-weight-bold">AUDITOR ISO</span>
@@ -355,49 +260,7 @@
         </b-col>
       </b-row>
     </div>
-    <div v-if="form.smkp">
-      <div class="d-flex align-items-center justify-content-between mb-2">
-        <span class="font-weight-bold">AUDITOR SMKP</span>
-        <b-button variant="primary" size="sm">ADD +</b-button>
-      </div>
-      <b-row>
-        <b-col>
-          <validation-provider name="Reference ISO" rules="required" v-slot="{ errors }">
-            <b-form-group
-              label-class="text-uppercase font-weight-bold"
-              :invalid-feedback="errors[0]"
-            >
-              <b-form-select
-                v-model="form.isoStandard"
-                :options="options"
-                :class="{ 'is-invalid': errors.length }"
-              >
-                <template #first>
-                  <b-form-select-option
-                    :value="null"
-                    disabled
-                  >
-                    ISO Standard
-                  </b-form-select-option>
-                </template>
-              </b-form-select>
-            </b-form-group>
-          </validation-provider>
-        </b-col>
-        <b-col>
-          <b-form-group>
-            <b-form-input
-              v-model="form.isotext"
-              placeholder="Division/Department"
-              disabled
-              trim
-            >
-            </b-form-input>
-          </b-form-group>
-        </b-col>
-      </b-row>
-    </div>
-    <div v-if="form.iso || form.smkp">
+    <div v-if="form.iso">
       <div class="d-flex align-items-center justify-content-between mb-2">
         <span class="font-weight-bold">AUDITEE</span>
         <b-button variant="primary" size="sm">ADD +</b-button>

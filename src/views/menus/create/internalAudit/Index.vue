@@ -1,6 +1,6 @@
 <template>
   <div class="mb-5">
-    <b-card class="wrapper shadow p-3 mb-4">
+    <b-card class="wrapper shadow p-3 mb-5">
       <validation-observer ref="form" slim>
         <Form :form="form" :isView="false" :isEdit="false" />
       </validation-observer>
