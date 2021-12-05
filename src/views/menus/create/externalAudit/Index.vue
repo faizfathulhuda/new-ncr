@@ -44,9 +44,13 @@ export default {
     form: {
       isoStandard: null,
       isoType: null,
-      smkpType: null,
-      isoClause: null,
-      evidence: []
+      isoClause: [null],
+      evidence: [],
+      referenceIso: [null],
+      auditorIso: [null],
+      auditorIsoDiv: [null],
+      auditee: [null],
+      auditeeDiv: [null]
     },
     icon: 'caret-right-fill'
   }),

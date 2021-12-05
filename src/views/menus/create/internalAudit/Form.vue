@@ -209,54 +209,53 @@
     <div v-if="form.iso">
       <div class="d-flex align-items-center justify-content-between mb-2">
         <span class="font-weight-bold">REFERENCE ISO</span>
-        <b-button variant="primary" size="sm">ADD +</b-button>
+        <b-button variant="primary" size="sm" @click="addReferenceIso">ADD +</b-button>
       </div>
-      <b-row>
+      <b-row v-for="(item, i) of form.referenceIso" :key="i">
         <b-col>
           <validation-provider name="Reference ISO" rules="required" v-slot="{ errors }">
             <b-form-group
-              label-class="text-uppercase font-weight-bold"
               :invalid-feedback="errors[0]"
             >
-              <b-form-select
-                v-model="form.isoStandard"
+              <v-select
+                v-model="form.referenceIso[i]"
+                label="text"
                 :options="options"
+                :reduce="({ value }) => value"
+                :disabled="isView"
                 :class="{ 'is-invalid': errors.length }"
-              >
-                <template #first>
-                  <b-form-select-option
-                    :value="null"
-                    disabled
-                  >
-                    ISO Standard
-                  </b-form-select-option>
-                </template>
-              </b-form-select>
+              />
             </b-form-group>
           </validation-provider>
         </b-col>
         <b-col>
-          <validation-provider name="Reference ISO" rules="required" v-slot="{ errors }">
+          <validation-provider name="ISO Clause" rules="required" v-slot="{ errors }">
             <b-form-group
-              label-class="text-uppercase font-weight-bold"
               :invalid-feedback="errors[0]"
             >
-              <b-form-select
-                v-model="form.isoClause"
+              <v-select
+                v-model="form.isoClause[i]"
+                label="text"
                 :options="options"
+                :reduce="({ value }) => value"
+                :disabled="isView"
                 :class="{ 'is-invalid': errors.length }"
-              >
-                <template #first>
-                  <b-form-select-option
-                    :value="null"
-                    disabled
-                  >
-                    ISO Clause
-                  </b-form-select-option>
-                </template>
-              </b-form-select>
+              />
             </b-form-group>
           </validation-provider>
+        </b-col>
+        <b-col
+          v-if="form.referenceIso.length > 1"
+          cols="1"
+          class="d-flex justify-content-center pt-2"
+        >
+          <b-icon
+            font-scale="1.2"
+            icon="x"
+            variant="light"
+            class="rounded-circle bg-danger pointer"
+            @click="removeReferenceIso(i)"
+          />
         </b-col>
       </b-row>
     </div>
@@ -268,46 +267,32 @@
         <b-col>
           <validation-provider name="Reference ISO" rules="required" v-slot="{ errors }">
             <b-form-group
-              label-class="text-uppercase font-weight-bold"
               :invalid-feedback="errors[0]"
             >
-              <b-form-select
-                v-model="form.isoStandard"
+              <v-select
+                v-model="form.referenceIso[0]"
+                label="text"
                 :options="options"
+                :reduce="({ value }) => value"
+                :disabled="isView"
                 :class="{ 'is-invalid': errors.length }"
-              >
-                <template #first>
-                  <b-form-select-option
-                    :value="null"
-                    disabled
-                  >
-                    Element
-                  </b-form-select-option>
-                </template>
-              </b-form-select>
+              />
             </b-form-group>
           </validation-provider>
         </b-col>
         <b-col>
-          <validation-provider name="Reference ISO" rules="required" v-slot="{ errors }">
+          <validation-provider name="Sub-Element" rules="required" v-slot="{ errors }">
             <b-form-group
-              label-class="text-uppercase font-weight-bold"
               :invalid-feedback="errors[0]"
             >
-              <b-form-select
-                v-model="form.isoClause"
+              <v-select
+                v-model="form.subElement"
+                label="text"
                 :options="options"
+                :reduce="({ value }) => value"
+                :disabled="isView"
                 :class="{ 'is-invalid': errors.length }"
-              >
-                <template #first>
-                  <b-form-select-option
-                    :value="null"
-                    disabled
-                  >
-                    Sub-Element
-                  </b-form-select-option>
-                </template>
-              </b-form-select>
+              />
             </b-form-group>
           </validation-provider>
         </b-col>
@@ -316,29 +301,22 @@
     <div v-if="form.iso">
       <div class="d-flex align-items-center justify-content-between mb-2">
         <span class="font-weight-bold">AUDITOR ISO</span>
-        <b-button variant="primary" size="sm">ADD +</b-button>
+        <b-button variant="primary" size="sm" @click="addAuditorIso">ADD +</b-button>
       </div>
-      <b-row>
+      <b-row v-for="(item, i) of form.auditorIso" :key="i">
         <b-col>
-          <validation-provider name="Reference ISO" rules="required" v-slot="{ errors }">
+          <validation-provider name="Auditor ISO" rules="required" v-slot="{ errors }">
             <b-form-group
-              label-class="text-uppercase font-weight-bold"
               :invalid-feedback="errors[0]"
             >
-              <b-form-select
-                v-model="form.isoStandard"
+              <v-select
+                v-model="form.auditorIso[i]"
+                label="text"
                 :options="options"
+                :reduce="({ value }) => value"
+                :disabled="isView"
                 :class="{ 'is-invalid': errors.length }"
-              >
-                <template #first>
-                  <b-form-select-option
-                    :value="null"
-                    disabled
-                  >
-                    ISO Standard
-                  </b-form-select-option>
-                </template>
-              </b-form-select>
+              />
             </b-form-group>
           </validation-provider>
         </b-col>
@@ -352,35 +330,41 @@
             >
             </b-form-input>
           </b-form-group>
+        </b-col>
+        <b-col
+          v-if="form.auditorIso.length > 1"
+          cols="1"
+          class="d-flex justify-content-center pt-2"
+        >
+          <b-icon
+            font-scale="1.2"
+            icon="x"
+            variant="light"
+            class="rounded-circle bg-danger pointer"
+            @click="removeAuditorIso(i)"
+          />
         </b-col>
       </b-row>
     </div>
     <div v-if="form.smkp">
       <div class="d-flex align-items-center justify-content-between mb-2">
         <span class="font-weight-bold">AUDITOR SMKP</span>
-        <b-button variant="primary" size="sm">ADD +</b-button>
+        <b-button variant="primary" size="sm" @click="addAuditorSmkp">ADD +</b-button>
       </div>
-      <b-row>
+      <b-row v-for="(item, i) of form.auditorSmkp" :key="i">
         <b-col>
-          <validation-provider name="Reference ISO" rules="required" v-slot="{ errors }">
+          <validation-provider name="Auditor SMKP" rules="required" v-slot="{ errors }">
             <b-form-group
-              label-class="text-uppercase font-weight-bold"
               :invalid-feedback="errors[0]"
             >
-              <b-form-select
-                v-model="form.isoStandard"
+              <v-select
+                v-model="form.auditorSmkp[i]"
+                label="text"
                 :options="options"
+                :reduce="({ value }) => value"
+                :disabled="isView"
                 :class="{ 'is-invalid': errors.length }"
-              >
-                <template #first>
-                  <b-form-select-option
-                    :value="null"
-                    disabled
-                  >
-                    ISO Standard
-                  </b-form-select-option>
-                </template>
-              </b-form-select>
+              />
             </b-form-group>
           </validation-provider>
         </b-col>
@@ -394,35 +378,41 @@
             >
             </b-form-input>
           </b-form-group>
+        </b-col>
+        <b-col
+          v-if="form.auditorSmkp.length > 1"
+          cols="1"
+          class="d-flex justify-content-center pt-2"
+        >
+          <b-icon
+            font-scale="1.2"
+            icon="x"
+            variant="light"
+            class="rounded-circle bg-danger pointer"
+            @click="removeAuditorSmkp(i)"
+          />
         </b-col>
       </b-row>
     </div>
     <div v-if="form.iso || form.smkp">
       <div class="d-flex align-items-center justify-content-between mb-2">
         <span class="font-weight-bold">AUDITEE</span>
-        <b-button variant="primary" size="sm">ADD +</b-button>
+        <b-button variant="primary" size="sm" @click="addAuditee">ADD +</b-button>
       </div>
-      <b-row>
+      <b-row v-for="(item, i) of form.auditee" :key="i">
         <b-col>
           <validation-provider name="Reference ISO" rules="required" v-slot="{ errors }">
             <b-form-group
-              label-class="text-uppercase font-weight-bold"
               :invalid-feedback="errors[0]"
             >
-              <b-form-select
-                v-model="form.isoStandard"
+              <v-select
+                v-model="form.auditee[i]"
+                label="text"
                 :options="options"
+                :reduce="({ value }) => value"
+                :disabled="isView"
                 :class="{ 'is-invalid': errors.length }"
-              >
-                <template #first>
-                  <b-form-select-option
-                    :value="null"
-                    disabled
-                  >
-                    ISO Standard
-                  </b-form-select-option>
-                </template>
-              </b-form-select>
+              />
             </b-form-group>
           </validation-provider>
         </b-col>
@@ -436,6 +426,19 @@
             >
             </b-form-input>
           </b-form-group>
+        </b-col>
+        <b-col
+          v-if="form.auditee.length > 1"
+          cols="1"
+          class="d-flex justify-content-center pt-2"
+        >
+          <b-icon
+            font-scale="1.2"
+            icon="x"
+            variant="light"
+            class="rounded-circle bg-danger pointer"
+            @click="removeAuditee(i)"
+          />
         </b-col>
       </b-row>
     </div>
@@ -444,6 +447,7 @@
 
 <script>
 import noImage from '@/assets/no-image.svg'
+import VSelect from 'vue-select'
 
 export default {
   props: {
@@ -459,6 +463,10 @@ export default {
       type: Object,
       default: () => ({})
     }
+  },
+
+  components: {
+    VSelect
   },
 
   data: () => ({
@@ -497,6 +505,38 @@ export default {
     },
     formatNames() {
       return `${this.form.evidence.length} file(s) selected`
+    },
+    addReferenceIso() {
+      this.form.referenceIso.push(null)
+      this.form.isoClause.push(null)
+    },
+    removeReferenceIso(index) {
+      this.form.referenceIso.splice(index, 1)
+      this.form.isoClause.splice(index, 1)
+    },
+    addAuditorIso() {
+      this.form.auditorIso.push(null)
+      this.form.auditorIsoDiv.push(null)
+    },
+    removeAuditorIso(index) {
+      this.form.auditorIso.splice(index, 1)
+      this.form.auditorIsoDiv.splice(index, 1)
+    },
+    addAuditorSmkp() {
+      this.form.auditorSmkp.push(null)
+      this.form.auditorSmkpDiv.push(null)
+    },
+    removeAuditorSmkp(index) {
+      this.form.auditorSmkp.splice(index, 1)
+      this.form.auditorSmkpDiv.splice(index, 1)
+    },
+    addAuditee() {
+      this.form.auditee.push(null)
+      this.form.auditeeDiv.push(null)
+    },
+    removeAuditee(index) {
+      this.form.auditee.splice(index, 1)
+      this.form.auditeeDiv.splice(index, 1)
     }
   }
 }
