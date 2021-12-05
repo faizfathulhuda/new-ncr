@@ -10,28 +10,31 @@
             <b-card-body>
               <b-row>
                 <b-col lg="4">
-                  <b-form-group
-                    label="COMPANY"
-                    label-for="company-1"
-                  >
-                    <v-select id="company-1" multiple v-model="filterCompany" @input="contextChanged" :options="companyOptions"></v-select>
-                  </b-form-group>
+                  <custom-select
+                    label="Company"
+                    placeholder="Filter by Company"
+                    v-model="filter.company"
+                    @input="contextChanged"
+                    :options="options.company"
+                  />
                 </b-col>
                 <b-col lg="4">
-                  <b-form-group
-                    label="ORGANIZATION"
-                    label-for="organization-1"
-                  >
-                    <v-select id="organization-1" multiple v-model="filterOrganization" @input="contextChanged" :options="organizationOptions"></v-select>
-                  </b-form-group>
+                  <custom-select
+                    label="Organization"
+                    placeholder="Filter by Organization"
+                    v-model="filter.organization"
+                    @input="contextChanged"
+                    :options="options.organization"
+                  />
                 </b-col>
                 <b-col lg="4">
-                  <b-form-group
-                    label="ROLE"
-                    label-for="role-1"
-                  >
-                    <v-select id="role-1" multiple v-model="filterRole" @input="contextChanged" :options="roleOptions"></v-select>
-                  </b-form-group>
+                  <custom-select
+                    label="Role"
+                    placeholder="Filter by Role"
+                    v-model="filter.role"
+                    @input="contextChanged"
+                    :options="options.role"
+                  />
                 </b-col>
               </b-row>
             </b-card-body>
@@ -145,24 +148,28 @@
 </template>
 
 <script>
-import VSelect from 'vue-select'
 import CustomTable from '@/components/CustomTable'
+import CustomSelect from '@/components/CustomSelect'
 import api from '@/api'
 
 export default {
   components: {
     CustomTable,
-    VSelect
+    CustomSelect
   },
   data() {
     return {
       itemModal: {},
-      filterCompany: [],
-      companyOptions: [],
-      filterOrganization: [],
-      organizationOptions: [],
-      filterRole: [],
-      roleOptions: [],
+      options: {
+        company: [],
+        organization: [],
+        role: []
+      },
+      filter: {
+        company: [],
+        organization: [],
+        role: []
+      },
       keyword: '',
       items: [],
       fields: [
@@ -196,19 +203,19 @@ export default {
   methods: {
     async getCompany() {
       const { data: { data } } = await api.companyList()
-      this.companyOptions = data.map(a => {
+      this.options.company = data.map(a => {
         return { label: a.name, key: a.id }
       })
     },
     async getOrganization() {
       const { data: { data } } = await api.organizationList()
-      this.organizationOptions = data.map(a => {
+      this.options.organization = data.map(a => {
         return { label: a.name, key: a.id }
       })
     },
     async getRole() {
       const { data: { data } } = await api.roleList()
-      this.roleOptions = data.map(a => {
+      this.options.role = data.map(a => {
         return { label: a.name, key: a.id }
       })
     },
@@ -216,17 +223,15 @@ export default {
       const params = {
         currentPage: this.currentPage,
         length: this.perPage,
-        companyId: this.filterCompany.map(a => a.key).length === 0 ? null : this.filterCompany.map(a => a.key),
-        organizationId: this.filterOrganization.map(a => a.key).length === 0 ? null : this.filterOrganization.map(a => a.key),
-        roleId: this.filterRole.map(a => a.key).length === 0 ? null : this.filterRole.map(a => a.key),
+        companyId: this.filter.company.map(a => a.key).length === 0 ? null : this.filter.company.map(a => a.key),
+        organizationId: this.filter.organization.map(a => a.key).length === 0 ? null : this.filter.organization.map(a => a.key),
+        roleId: this.filter.role.map(a => a.key).length === 0 ? null : this.filter.role.map(a => a.key),
         keyword: this.keyword === '' ? null : this.keyword,
         asc: !this.sortDesc
       }
 
       const { data: { data } } = await api.user.list(params)
       this.totalRows = data.foundData < this.perPage ? data.foundData : data.lengthData
-
-      console.log(data)
 
       if (data.user === null && data.userList === null) {
         this.items = []
