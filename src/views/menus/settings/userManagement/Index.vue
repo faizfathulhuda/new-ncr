@@ -17,6 +17,7 @@
                     @input="contextChanged"
                     :options="options.company"
                   />
+                    <v-select id="company-1" multiple v-model="filterCompany" @input="$refs.table.refresh()" :options="companyOptions"></v-select>
                 </b-col>
                 <b-col lg="4">
                   <custom-select
@@ -26,6 +27,7 @@
                     @input="contextChanged"
                     :options="options.organization"
                   />
+                    <v-select id="organization-1" multiple v-model="filterOrganization" @input="$refs.table.refresh()" :options="organizationOptions"></v-select>
                 </b-col>
                 <b-col lg="4">
                   <custom-select
@@ -35,6 +37,7 @@
                     @input="contextChanged"
                     :options="options.role"
                   />
+                    <v-select id="role-1" multiple v-model="filterRole" @input="$refs.table.refresh()" :options="roleOptions"></v-select>
                 </b-col>
               </b-row>
             </b-card-body>
@@ -63,25 +66,35 @@
         </b-row>
       </b-col>
       <b-col lg="3" class="my-1">
-        <b-input-group size="sm" class="mb-2">
-          <b-input-group-prepend is-text>
-            <b-icon icon="search"></b-icon>
-          </b-input-group-prepend>
-          <b-form-input v-model="keyword" type="search" placeholder="Search" @input="contextChanged"></b-form-input>
-        </b-input-group>
+        <b-form-group class="m-0">
+          <b-form-input
+            v-model="keyword"
+            placeholder="Search..."
+            @change="$refs.table.refresh()"
+          ></b-form-input>
+        </b-form-group>
       </b-col>
     </b-row>
 
     <custom-table
-      :items="items"
+      empty-text="No data"
+      :items="fetchUsers"
       :fields="fields"
       :current-page="currentPage"
       :per-page="perPage"
       :total-rows="totalRows"
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
-      @context-changed="contextChanged"
+      ref="table"
     >
+      <template v-slot:table-busy>
+          <div class="text-center my-4">
+            <b-spinner
+              variant="primary"
+              class="spinner-lg"
+            />
+          </div>
+        </template>
       <template #cell(action)="row">
         <div class="data">
           <b-link v-b-modal.modal-prevent-closing @click="showModal(row.item)" class="text-secondary">
@@ -198,29 +211,28 @@ export default {
     this.getCompany()
     this.getOrganization()
     this.getRole()
-    this.contextChanged()
   },
   methods: {
     async getCompany() {
-      const { data: { data } } = await api.companyList()
+      const { data } = await api.company.list()
       this.options.company = data.map(a => {
         return { label: a.name, key: a.id }
       })
     },
     async getOrganization() {
-      const { data: { data } } = await api.organizationList()
+      const { data } = await api.organization.list()
       this.options.organization = data.map(a => {
         return { label: a.name, key: a.id }
       })
     },
     async getRole() {
-      const { data: { data } } = await api.roleList()
+      const { data } = await api.role.list()
       this.options.role = data.map(a => {
         return { label: a.name, key: a.id }
       })
     },
-    async contextChanged() {
-      const params = {
+    async fetchUsers() {
+      const { data } = await api.user.list({
         currentPage: this.currentPage,
         length: this.perPage,
         companyId: this.filter.company.map(a => a.key).length === 0 ? null : this.filter.company.map(a => a.key),
@@ -228,10 +240,7 @@ export default {
         roleId: this.filter.role.map(a => a.key).length === 0 ? null : this.filter.role.map(a => a.key),
         keyword: this.keyword === '' ? null : this.keyword,
         asc: !this.sortDesc
-      }
-
-      const { data: { data } } = await api.user.list(params)
-      this.totalRows = data.foundData < this.perPage ? data.foundData : data.lengthData
+      })
 
       if (data.user === null && data.userList === null) {
         this.items = []
@@ -262,13 +271,17 @@ export default {
           })
         }
       }
+      this.totalRows = data.foundData < this.perPage ? data.foundData : data.lengthData
+
+      return this.items
     },
     showModal(item) {
       this.itemModal = item
     },
     resetModal() {
       this.itemModal = {}
-    }
+    },
+    handleOk() {}
   }
 }
 </script>

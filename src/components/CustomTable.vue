@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-table
+      ref="table"
       responsive="xl"
       table-class="text-start"
       thead-tr-class="table-header"
@@ -17,7 +18,13 @@
 </template>
 <script>
 export default {
-  name: 'CustomTable'
+  name: 'CustomTable',
+  props: {
+    ref: {
+      type: String,
+      default: ''
+    }
+  }
 }
 </script>
 

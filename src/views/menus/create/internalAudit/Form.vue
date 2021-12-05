@@ -4,28 +4,27 @@
       <span class="text-uppercase font-weight-bold">ncr source</span>
       <b-form-checkbox
         class="ml-4"
-        v-model="form.iso"
+        v-model="form.IsIso"
       >
         Internal Audit ISO
       </b-form-checkbox>
       <b-form-checkbox
         class="ml-4"
-        v-model="form.smkp"
+        v-model="form.IsSMKP"
       >
         Internal Audit SMKP
       </b-form-checkbox>
     </div>
     <b-row class="mb-3">
-      <b-col v-if="form.iso || form.smkp">
+      <b-col v-if="form.IsIso || form.IsSMKP">
         <span class="text-uppercase font-weight-bold">ncr number</span>
         <b-card>
           <b-row>
-            <b-col v-if="form.iso">
+            <b-col v-if="form.IsIso">
               <b-form-group
                 label="NCR Number Internal Audit ISO"
               >
                 <b-form-input
-                  v-model="form.isotext"
                   placeholder="NCR Number Internal Audit ISO"
                   disabled
                   trim
@@ -33,12 +32,11 @@
                 </b-form-input>
               </b-form-group>
             </b-col>
-            <b-col v-if="form.smkp">
+            <b-col v-if="form.IsSMKP">
               <b-form-group
                 label="NCR Number Internal SMKP"
               >
                 <b-form-input
-                  v-model="form.smkptext"
                   placeholder="NCR Number Internal SMKP"
                   disabled
                   trim
@@ -64,7 +62,7 @@
                     type="date"
                     autocapitalize="off"
                     autocomplete="off"
-                    v-model="form.startDate"
+                    v-model="form.DateEnd"
                     placeholder="Select start date"
                     :class="{ 'is-invalid': errors.length }"
                   />
@@ -82,7 +80,7 @@
                     type="date"
                     autocapitalize="off"
                     autocomplete="off"
-                    v-model="form.endDate"
+                    v-model="form.DateStart"
                     placeholder="Select end date"
                     :class="{ 'is-invalid': errors.length }"
                   />
@@ -98,7 +96,7 @@
       label-class="text-uppercase font-weight-bold"
     >
       <b-form-input
-        v-model="form.site"
+        :value="profile.organization"
         disabled
         trim
       >
@@ -106,15 +104,15 @@
     </b-form-group>
     <span class="text-uppercase font-weight-bold">ncr type</span>
     <b-row>
-      <b-col v-if="form.iso">
+      <b-col v-if="form.IsIso">
         <validation-provider name="NCR Type ISO" rules="required" v-slot="{ errors }">
           <b-form-group
             label-class="text-uppercase font-weight-bold"
             :invalid-feedback="errors[0]"
           >
             <b-form-select
-              v-model="form.isoType"
-              :options="options"
+              v-model="form.IsoType"
+              :options="ncrIsoTypeList"
               :class="{ 'is-invalid': errors.length }"
             >
               <template #first>
@@ -129,15 +127,15 @@
           </b-form-group>
         </validation-provider>
       </b-col>
-      <b-col v-if="form.smkp">
+      <b-col v-if="form.IsSMKP">
         <validation-provider name="NCR Type SMKP" rules="required" v-slot="{ errors }">
           <b-form-group
             label-class="text-uppercase font-weight-bold"
             :invalid-feedback="errors[0]"
           >
             <b-form-select
-              v-model="form.smkpType"
-              :options="options"
+              v-model="form.SMKPType"
+              :options="ncrSmkpTypeList"
               :class="{ 'is-invalid': errors.length }"
             >
               <template #first>
@@ -152,7 +150,7 @@
           </b-form-group>
         </validation-provider>
       </b-col>
-      <b-col v-if="!form.iso && !form.smkp" class="mb-3 text-danger">Please choose NCR Source</b-col>
+      <b-col v-if="!form.IsIso && !form.IsSMKP" class="mb-3 text-danger">Please choose NCR Source</b-col>
     </b-row>
     <validation-provider name="detail of nonconformance" rules="required" v-slot="{ errors }">
       <b-form-group
@@ -162,7 +160,7 @@
       >
         <b-form-textarea
           id="textarea"
-          v-model="form.detail"
+          v-model="form.ProblemDesc"
           placeholder="Problem description"
           rows="4"
           no-resize
@@ -178,7 +176,7 @@
           trim
           autocapitalize="off"
           autocomplete="off"
-          v-model="form.location"
+          v-model="form.Location"
           placeholder="Location of nonconformance"
           :class="{ 'is-invalid': errors.length }"
         />
@@ -195,18 +193,18 @@
         :file-name-formatter="formatNames"
         @input="onFilePicked"
         accept="image/*, .pdf"
-        :disabled="form.evidence.length === 3"
+        :disabled="form.FileNCRList.length === 3"
       ></b-form-file>
     </b-form-group>
     <b-alert :show="!!errorFile" variant="danger" dismissible>{{ errorFile }}</b-alert>
     <div class="d-flex justify-content-around">
-      <div v-for="(item, idx) of form.evidence" class="w-25 mr-1 mb-1 d-flex flex-column" :key="idx">
+      <div v-for="(item, idx) of form.FileNCRList" class="w-25 mr-1 mb-1 d-flex flex-column" :key="idx">
         <b-icon icon="x" variant="light" class="rounded-circle bg-danger align-self-end pointer" @click="deleteFile(item.id)"/>
         <b-img thumbnail fluid class="h-100" :src="item.file.type.includes('image') ? item.fileTarget : defaultImage"/>
         <span>{{ item.file.name }}</span>
       </div>
     </div>
-    <div v-if="form.iso">
+    <div v-if="form.IsIso">
       <div class="d-flex align-items-center justify-content-between mb-2">
         <span class="font-weight-bold">REFERENCE ISO</span>
         <b-button variant="primary" size="sm" @click="addReferenceIso">ADD +</b-button>
@@ -219,9 +217,10 @@
             >
               <v-select
                 v-model="form.referenceIso[i]"
-                label="text"
-                :options="options"
-                :reduce="({ value }) => value"
+                label="title"
+                :options="isoStandardList"
+                :reduce="({ id }) => id"
+                @input="onIsoStandardChange(i)"
                 :disabled="isView"
                 :class="{ 'is-invalid': errors.length }"
               />
@@ -234,11 +233,11 @@
               :invalid-feedback="errors[0]"
             >
               <v-select
-                v-model="form.isoClause[i]"
-                label="text"
-                :options="options"
-                :reduce="({ value }) => value"
-                :disabled="isView"
+                v-model="form.ISOClauseList[i]"
+                label="title"
+                :options="listIsoClause"
+                :reduce="({ id }) => id"
+                :disabled="listIsoClause.length === 0"
                 :class="{ 'is-invalid': errors.length }"
               />
             </b-form-group>
@@ -259,7 +258,7 @@
         </b-col>
       </b-row>
     </div>
-    <div v-if="form.smkp">
+    <div v-if="form.IsSMKP">
       <div class="d-flex align-items-center justify-content-between mb-2">
         <span class="font-weight-bold">REFERENCE SMKP</span>
       </div>
@@ -298,7 +297,7 @@
         </b-col>
       </b-row>
     </div>
-    <div v-if="form.iso">
+    <div v-if="form.IsIso">
       <div class="d-flex align-items-center justify-content-between mb-2">
         <span class="font-weight-bold">AUDITOR ISO</span>
         <b-button variant="primary" size="sm" @click="addAuditorIso">ADD +</b-button>
@@ -346,7 +345,7 @@
         </b-col>
       </b-row>
     </div>
-    <div v-if="form.smkp">
+    <div v-if="form.IsSMKP">
       <div class="d-flex align-items-center justify-content-between mb-2">
         <span class="font-weight-bold">AUDITOR SMKP</span>
         <b-button variant="primary" size="sm" @click="addAuditorSmkp">ADD +</b-button>
@@ -394,7 +393,7 @@
         </b-col>
       </b-row>
     </div>
-    <div v-if="form.iso || form.smkp">
+    <div v-if="form.IsIso || form.IsSMKP">
       <div class="d-flex align-items-center justify-content-between mb-2">
         <span class="font-weight-bold">AUDITEE</span>
         <b-button variant="primary" size="sm" @click="addAuditee">ADD +</b-button>
@@ -462,6 +461,22 @@ export default {
     form: {
       type: Object,
       default: () => ({})
+    },
+    profile: {
+      type: Object,
+      default: () => ({})
+    },
+    ncrIsoTypeList: {
+      type: Array,
+      default: () => ([])
+    },
+    ncrSmkpTypeList: {
+      type: Array,
+      default: () => ([])
+    },
+    isoStandardList: {
+      type: Array,
+      default: () => ([])
     }
   },
 
@@ -478,18 +493,18 @@ export default {
       { value: 'd', text: 'This one is disabled', disabled: true }
     ],
     defaultImage: noImage,
-    errorFile: ''
+    errorFile: '',
+    listIsoClause: []
   }),
 
   methods: {
     async onFilePicked(ev) {
       const input = ev.length ? ev : ev.target.files
-      if ((this.form.evidence.length + input.length) < 4) {
-        console.log(input)
+      if ((this.form.FileNCRList.length + input.length) < 4) {
         for (const file of input) {
-          const itemIds = this.form.evidence.length ? this.form.evidence.map(({ id }) => id) : [0]
+          const itemIds = this.form.FileNCRList.length ? this.form.FileNCRList.map(({ id }) => id) : [0]
           const fileId = Math.max(...itemIds) + 1
-          this.form.evidence.push({
+          this.form.FileNCRList.push({
             id: fileId,
             file: file,
             fileTarget: URL.createObjectURL(file)
@@ -500,19 +515,20 @@ export default {
       }
     },
     deleteFile(id) {
-      const fileIndex = this.form.evidence.findIndex(v => v.id === id)
-      this.form.evidence.splice(fileIndex, 1)
+      const fileIndex = this.form.FileNCRList.findIndex(v => v.id === id)
+      this.form.FileNCRList.splice(fileIndex, 1)
     },
     formatNames() {
-      return `${this.form.evidence.length} file(s) selected`
+      return `${this.form.FileNCRList.length} file(s) selected`
     },
     addReferenceIso() {
       this.form.referenceIso.push(null)
-      this.form.isoClause.push(null)
     },
     removeReferenceIso(index) {
       this.form.referenceIso.splice(index, 1)
-      this.form.isoClause.splice(index, 1)
+    },
+    onIsoStandardChange(index) {
+      this.listIsoClause = this.isoStandardList[index].clauseList
     },
     addAuditorIso() {
       this.form.auditorIso.push(null)
