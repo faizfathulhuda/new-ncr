@@ -205,7 +205,7 @@ main {
   margin-left: 12px;
   padding: 0px 20px 20px 20px;
   transition: 0.3s;
-  height: calc(100% - 66px);
+  height: calc(100% - 85px);
   overflow: auto;
 
   @media screen and (min-width: 992px) {
