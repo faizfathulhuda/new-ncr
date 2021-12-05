@@ -4,9 +4,16 @@
       <b-col lg="12" class="my-1">
         <b-card no-body class="mb-1">
           <b-card-header class="bg-white border-0">
-            <b-link block v-b-toggle.accordion-1 variant="info" class="font-weight-bold text-decoration-none text-dark">Filter</b-link>
+            <b-link
+              block
+              v-b-toggle.user-management
+              variant="info"
+              class="font-weight-bold text-decoration-none text-dark"
+            >
+              Filter
+            </b-link>
           </b-card-header>
-          <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
+          <b-collapse id="user-management" visible accordion="my-accordion" role="tabpanel">
             <b-card-body>
               <b-row>
                 <b-col lg="4">
@@ -14,30 +21,27 @@
                     label="Company"
                     placeholder="Filter by Company"
                     v-model="filter.company"
-                    @input="contextChanged"
+                    @input="$refs.table.$refs.table.refresh()"
                     :options="options.company"
                   />
-                    <v-select id="company-1" multiple v-model="filterCompany" @input="$refs.table.refresh()" :options="companyOptions"></v-select>
                 </b-col>
                 <b-col lg="4">
                   <custom-select
                     label="Organization"
                     placeholder="Filter by Organization"
                     v-model="filter.organization"
-                    @input="contextChanged"
+                    @input="$refs.table.$refs.table.refresh()"
                     :options="options.organization"
                   />
-                    <v-select id="organization-1" multiple v-model="filterOrganization" @input="$refs.table.refresh()" :options="organizationOptions"></v-select>
                 </b-col>
                 <b-col lg="4">
                   <custom-select
                     label="Role"
                     placeholder="Filter by Role"
                     v-model="filter.role"
-                    @input="contextChanged"
+                    @input="$refs.table.$refs.table.refresh()"
                     :options="options.role"
                   />
-                    <v-select id="role-1" multiple v-model="filterRole" @input="$refs.table.refresh()" :options="roleOptions"></v-select>
                 </b-col>
               </b-row>
             </b-card-body>
@@ -70,19 +74,17 @@
           <b-form-input
             v-model="keyword"
             placeholder="Search..."
-            @change="$refs.table.refresh()"
+            @input="$refs.table.$refs.table.refresh()"
           ></b-form-input>
         </b-form-group>
       </b-col>
     </b-row>
 
     <custom-table
-      empty-text="No data"
       :items="fetchUsers"
       :fields="fields"
       :current-page="currentPage"
       :per-page="perPage"
-      :total-rows="totalRows"
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
       ref="table"
@@ -263,7 +265,7 @@ export default {
               username: a.username,
               email: a.email,
               company: a.company.name,
-              organization: a.workLocation ? a.workLocation.name : ' ',
+              organization: a.workLocation ? a.workLocation.name : '',
               role: a.userRoleList.map(a => {
                 return a.name
               })
@@ -271,6 +273,7 @@ export default {
           })
         }
       }
+
       this.totalRows = data.foundData < this.perPage ? data.foundData : data.lengthData
 
       return this.items
