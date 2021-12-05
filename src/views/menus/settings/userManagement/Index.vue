@@ -14,7 +14,7 @@
                     label="COMPANY"
                     label-for="company-1"
                   >
-                    <v-select id="company-1" multiple v-model="filterCompany" @input="contextChanged" :options="companyOptions"></v-select>
+                    <v-select id="company-1" multiple v-model="filterCompany" @input="$refs.table.refresh()" :options="companyOptions"></v-select>
                   </b-form-group>
                 </b-col>
                 <b-col lg="4">
@@ -22,7 +22,7 @@
                     label="ORGANIZATION"
                     label-for="organization-1"
                   >
-                    <v-select id="organization-1" multiple v-model="filterOrganization" @input="contextChanged" :options="organizationOptions"></v-select>
+                    <v-select id="organization-1" multiple v-model="filterOrganization" @input="$refs.table.refresh()" :options="organizationOptions"></v-select>
                   </b-form-group>
                 </b-col>
                 <b-col lg="4">
@@ -30,7 +30,7 @@
                     label="ROLE"
                     label-for="role-1"
                   >
-                    <v-select id="role-1" multiple v-model="filterRole" @input="contextChanged" :options="roleOptions"></v-select>
+                    <v-select id="role-1" multiple v-model="filterRole" @input="$refs.table.refresh()" :options="roleOptions"></v-select>
                   </b-form-group>
                 </b-col>
               </b-row>
@@ -60,25 +60,42 @@
         </b-row>
       </b-col>
       <b-col lg="3" class="my-1">
-        <b-input-group size="sm" class="mb-2">
-          <b-input-group-prepend is-text>
-            <b-icon icon="search"></b-icon>
-          </b-input-group-prepend>
-          <b-form-input v-model="keyword" type="search" placeholder="Search" @input="contextChanged"></b-form-input>
-        </b-input-group>
+        <b-form-group class="m-0">
+          <b-form-input
+            v-model="keyword"
+            placeholder="Search..."
+            @change="$refs.table.refresh()"
+          ></b-form-input>
+        </b-form-group>
       </b-col>
     </b-row>
 
-    <custom-table
-      :items="items"
+    <b-table
+      empty-text="No data"
+      :items="fetchUsers"
       :fields="fields"
       :current-page="currentPage"
       :per-page="perPage"
       :total-rows="totalRows"
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
-      @context-changed="contextChanged"
+      ref="table"
+      responsive="xl"
+      table-class="text-start"
+      thead-tr-class="table-header"
+      tbody-tr-class="table-row"
+      v-bind="$attrs"
+      v-on="$listeners"
+      custom-prop="any"
     >
+      <template v-slot:table-busy>
+          <div class="text-center my-4">
+            <b-spinner
+              variant="primary"
+              class="spinner-lg"
+            />
+          </div>
+        </template>
       <template #cell(action)="row">
         <div class="data">
           <b-link v-b-modal.modal-prevent-closing @click="showModal(row.item)" class="text-secondary">
@@ -98,7 +115,7 @@
       <template #cell()="row">
         <div class="data">{{ row.value }}</div>
       </template>
-    </custom-table>
+    </b-table>
 
     <b-row>
       <b-col lg="3">
@@ -146,12 +163,10 @@
 
 <script>
 import VSelect from 'vue-select'
-import CustomTable from '@/components/CustomTable'
 import api from '@/api'
 
 export default {
   components: {
-    CustomTable,
     VSelect
   },
   data() {
@@ -191,7 +206,6 @@ export default {
     this.getCompany()
     this.getOrganization()
     this.getRole()
-    this.contextChanged()
   },
   methods: {
     async getCompany() {
@@ -212,8 +226,8 @@ export default {
         return { label: a.name, key: a.id }
       })
     },
-    async contextChanged() {
-      const params = {
+    async fetchUsers() {
+      const { data } = await api.user.list({
         currentPage: this.currentPage,
         length: this.perPage,
         companyId: this.filterCompany.map(a => a.key).length === 0 ? null : this.filterCompany.map(a => a.key),
@@ -221,12 +235,7 @@ export default {
         roleId: this.filterRole.map(a => a.key).length === 0 ? null : this.filterRole.map(a => a.key),
         keyword: this.keyword === '' ? null : this.keyword,
         asc: !this.sortDesc
-      }
-
-      const { data } = await api.user.list(params)
-      this.totalRows = data.foundData < this.perPage ? data.foundData : data.lengthData
-
-      console.log(data)
+      })
 
       if (data.user === null && data.userList === null) {
         this.items = []
@@ -257,13 +266,17 @@ export default {
           })
         }
       }
+      this.totalRows = data.foundData < this.perPage ? data.foundData : data.lengthData
+
+      return this.items
     },
     showModal(item) {
       this.itemModal = item
     },
     resetModal() {
       this.itemModal = {}
-    }
+    },
+    handleOk() {}
   }
 }
 </script>
@@ -281,4 +294,66 @@ export default {
     border-radius: 24px;
   }
 }
+.table-row {
+    border-radius: 5px;
+    display: table-row;
+    outline: 0;
+    vertical-align: middle;
+
+    td {
+      margin: 0;
+      background-color: transparent;
+      border: none;
+      padding: 14px 0 0;
+      height: 1px;
+      .data {
+        background-color: white;
+        border-color: #F5F6F9;
+        padding: 16px;
+        height: 100%;
+        width: 100%;
+        display: inline-block;
+        p {
+          margin: 0;
+        }
+      }
+
+      &:first-child {
+        .data {
+          border-top-left-radius: 25px;
+          border-bottom-left-radius: 25px;
+        }
+      }
+
+      &:last-child {
+        .data {
+          border-top-right-radius: 25px;
+          border-bottom-right-radius: 25px;
+        }
+      }
+    }
+  }
+
+  .table-header {
+    border-radius: 5px;
+    display: table-row;
+    outline: 0;
+    vertical-align: middle;
+
+    th {
+      background-color: #EDEEFD;
+      padding: 0;
+      margin: 0;
+      border-color: #F5F6F9;
+      padding: 16px;
+
+      &:first-child {
+        border-top-left-radius: 25px;
+      }
+
+      &:last-child {
+        border-top-right-radius: 25px;
+      }
+    }
+  }
 </style>
