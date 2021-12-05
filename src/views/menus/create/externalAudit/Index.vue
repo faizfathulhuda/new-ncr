@@ -15,7 +15,8 @@
           <b-icon :icon="icon" />
         </b-button>
       </div>
-      <b-collapse id="collapse-1">
+      <!-- Visible True to Set Collapse Show -->
+      <b-collapse id="collapse-1" :visible="true">
         <b-card class="wrapper shadow p-3 mb-5">
           <CapaPlan :form="form" :isView="false" :isEdit="false" />
         </b-card>

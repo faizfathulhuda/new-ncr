@@ -1,15 +1,19 @@
 import auth from '@/api/auth'
 import user from '@/api/user'
-import request from '@/api/handler'
-
-const companyList = () => request.get('/company/company-list')
-const organizationList = () => request.get('/Organization')
-const roleList = () => request.get('/role')
+import internalAudit from './internalAudit'
+import isoStandard from './isoStandard'
+import element from './element'
+import company from './company'
+import organization from './organization'
+import role from './role'
 
 export default {
   auth,
   user,
-  companyList,
-  organizationList,
-  roleList
+  company,
+  organization,
+  role,
+  internalAudit,
+  isoStandard,
+  element
 }

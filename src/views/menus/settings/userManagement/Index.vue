@@ -195,19 +195,19 @@ export default {
   },
   methods: {
     async getCompany() {
-      const { data: { data } } = await api.companyList()
+      const { data } = await api.company.list()
       this.companyOptions = data.map(a => {
         return { label: a.name, key: a.id }
       })
     },
     async getOrganization() {
-      const { data: { data } } = await api.organizationList()
+      const { data } = await api.organization.list()
       this.organizationOptions = data.map(a => {
         return { label: a.name, key: a.id }
       })
     },
     async getRole() {
-      const { data: { data } } = await api.roleList()
+      const { data } = await api.role.list()
       this.roleOptions = data.map(a => {
         return { label: a.name, key: a.id }
       })
@@ -223,7 +223,7 @@ export default {
         asc: !this.sortDesc
       }
 
-      const { data: { data } } = await api.user.list(params)
+      const { data } = await api.user.list(params)
       this.totalRows = data.foundData < this.perPage ? data.foundData : data.lengthData
 
       console.log(data)
