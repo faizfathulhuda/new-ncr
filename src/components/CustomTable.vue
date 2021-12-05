@@ -2,6 +2,7 @@
   <div>
     <b-table
       ref="table"
+      empty-text="No data"
       responsive="xl"
       table-class="text-start"
       thead-tr-class="table-header"
@@ -18,13 +19,7 @@
 </template>
 <script>
 export default {
-  name: 'CustomTable',
-  props: {
-    ref: {
-      type: String,
-      default: ''
-    }
-  }
+  name: 'CustomTable'
 }
 </script>
 

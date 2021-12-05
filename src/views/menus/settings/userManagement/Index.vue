@@ -4,34 +4,44 @@
       <b-col lg="12" class="my-1">
         <b-card no-body class="mb-1">
           <b-card-header class="bg-white border-0">
-            <b-link block v-b-toggle.accordion-1 variant="info" class="font-weight-bold text-decoration-none text-dark">Filter</b-link>
+            <b-link
+              block
+              v-b-toggle.user-management
+              variant="info"
+              class="font-weight-bold text-decoration-none text-dark"
+            >
+              Filter
+            </b-link>
           </b-card-header>
-          <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
+          <b-collapse id="user-management" visible accordion="my-accordion" role="tabpanel">
             <b-card-body>
               <b-row>
                 <b-col lg="4">
-                  <b-form-group
-                    label="COMPANY"
-                    label-for="company-1"
-                  >
-                    <v-select id="company-1" multiple v-model="filterCompany" @input="$refs.table.refresh()" :options="companyOptions"></v-select>
-                  </b-form-group>
+                  <custom-select
+                    label="Company"
+                    placeholder="Filter by Company"
+                    v-model="filter.company"
+                    @input="$refs.table.$refs.table.refresh()"
+                    :options="options.company"
+                  />
                 </b-col>
                 <b-col lg="4">
-                  <b-form-group
-                    label="ORGANIZATION"
-                    label-for="organization-1"
-                  >
-                    <v-select id="organization-1" multiple v-model="filterOrganization" @input="$refs.table.refresh()" :options="organizationOptions"></v-select>
-                  </b-form-group>
+                  <custom-select
+                    label="Organization"
+                    placeholder="Filter by Organization"
+                    v-model="filter.organization"
+                    @input="$refs.table.$refs.table.refresh()"
+                    :options="options.organization"
+                  />
                 </b-col>
                 <b-col lg="4">
-                  <b-form-group
-                    label="ROLE"
-                    label-for="role-1"
-                  >
-                    <v-select id="role-1" multiple v-model="filterRole" @input="$refs.table.refresh()" :options="roleOptions"></v-select>
-                  </b-form-group>
+                  <custom-select
+                    label="Role"
+                    placeholder="Filter by Role"
+                    v-model="filter.role"
+                    @input="$refs.table.$refs.table.refresh()"
+                    :options="options.role"
+                  />
                 </b-col>
               </b-row>
             </b-card-body>
@@ -64,29 +74,20 @@
           <b-form-input
             v-model="keyword"
             placeholder="Search..."
-            @change="$refs.table.refresh()"
+            @input="$refs.table.$refs.table.refresh()"
           ></b-form-input>
         </b-form-group>
       </b-col>
     </b-row>
 
-    <b-table
-      empty-text="No data"
+    <custom-table
       :items="fetchUsers"
       :fields="fields"
       :current-page="currentPage"
       :per-page="perPage"
-      :total-rows="totalRows"
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
       ref="table"
-      responsive="xl"
-      table-class="text-start"
-      thead-tr-class="table-header"
-      tbody-tr-class="table-row"
-      v-bind="$attrs"
-      v-on="$listeners"
-      custom-prop="any"
     >
       <template v-slot:table-busy>
           <div class="text-center my-4">
@@ -115,7 +116,7 @@
       <template #cell()="row">
         <div class="data">{{ row.value }}</div>
       </template>
-    </b-table>
+    </custom-table>
 
     <b-row>
       <b-col lg="3">
@@ -162,22 +163,28 @@
 </template>
 
 <script>
-import VSelect from 'vue-select'
+import CustomTable from '@/components/CustomTable'
+import CustomSelect from '@/components/CustomSelect'
 import api from '@/api'
 
 export default {
   components: {
-    VSelect
+    CustomTable,
+    CustomSelect
   },
   data() {
     return {
       itemModal: {},
-      filterCompany: [],
-      companyOptions: [],
-      filterOrganization: [],
-      organizationOptions: [],
-      filterRole: [],
-      roleOptions: [],
+      options: {
+        company: [],
+        organization: [],
+        role: []
+      },
+      filter: {
+        company: [],
+        organization: [],
+        role: []
+      },
       keyword: '',
       items: [],
       fields: [
@@ -210,19 +217,19 @@ export default {
   methods: {
     async getCompany() {
       const { data } = await api.company.list()
-      this.companyOptions = data.map(a => {
+      this.options.company = data.map(a => {
         return { label: a.name, key: a.id }
       })
     },
     async getOrganization() {
       const { data } = await api.organization.list()
-      this.organizationOptions = data.map(a => {
+      this.options.organization = data.map(a => {
         return { label: a.name, key: a.id }
       })
     },
     async getRole() {
       const { data } = await api.role.list()
-      this.roleOptions = data.map(a => {
+      this.options.role = data.map(a => {
         return { label: a.name, key: a.id }
       })
     },
@@ -230,9 +237,9 @@ export default {
       const { data } = await api.user.list({
         currentPage: this.currentPage,
         length: this.perPage,
-        companyId: this.filterCompany.map(a => a.key).length === 0 ? null : this.filterCompany.map(a => a.key),
-        organizationId: this.filterOrganization.map(a => a.key).length === 0 ? null : this.filterOrganization.map(a => a.key),
-        roleId: this.filterRole.map(a => a.key).length === 0 ? null : this.filterRole.map(a => a.key),
+        companyId: this.filter.company.map(a => a.key).length === 0 ? null : this.filter.company.map(a => a.key),
+        organizationId: this.filter.organization.map(a => a.key).length === 0 ? null : this.filter.organization.map(a => a.key),
+        roleId: this.filter.role.map(a => a.key).length === 0 ? null : this.filter.role.map(a => a.key),
         keyword: this.keyword === '' ? null : this.keyword,
         asc: !this.sortDesc
       })
@@ -258,7 +265,7 @@ export default {
               username: a.username,
               email: a.email,
               company: a.company.name,
-              organization: a.workLocation ? a.workLocation.name : ' ',
+              organization: a.workLocation ? a.workLocation.name : '',
               role: a.userRoleList.map(a => {
                 return a.name
               })
@@ -266,6 +273,7 @@ export default {
           })
         }
       }
+
       this.totalRows = data.foundData < this.perPage ? data.foundData : data.lengthData
 
       return this.items
@@ -294,66 +302,4 @@ export default {
     border-radius: 24px;
   }
 }
-.table-row {
-    border-radius: 5px;
-    display: table-row;
-    outline: 0;
-    vertical-align: middle;
-
-    td {
-      margin: 0;
-      background-color: transparent;
-      border: none;
-      padding: 14px 0 0;
-      height: 1px;
-      .data {
-        background-color: white;
-        border-color: #F5F6F9;
-        padding: 16px;
-        height: 100%;
-        width: 100%;
-        display: inline-block;
-        p {
-          margin: 0;
-        }
-      }
-
-      &:first-child {
-        .data {
-          border-top-left-radius: 25px;
-          border-bottom-left-radius: 25px;
-        }
-      }
-
-      &:last-child {
-        .data {
-          border-top-right-radius: 25px;
-          border-bottom-right-radius: 25px;
-        }
-      }
-    }
-  }
-
-  .table-header {
-    border-radius: 5px;
-    display: table-row;
-    outline: 0;
-    vertical-align: middle;
-
-    th {
-      background-color: #EDEEFD;
-      padding: 0;
-      margin: 0;
-      border-color: #F5F6F9;
-      padding: 16px;
-
-      &:first-child {
-        border-top-left-radius: 25px;
-      }
-
-      &:last-child {
-        border-top-right-radius: 25px;
-      }
-    }
-  }
 </style>

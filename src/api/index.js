@@ -6,6 +6,8 @@ import element from './element'
 import company from './company'
 import organization from './organization'
 import role from './role'
+import myDocument from './myDocument'
+import needMyApproval from './needMyApproval'
 
 export default {
   auth,
@@ -15,5 +17,7 @@ export default {
   role,
   internalAudit,
   isoStandard,
-  element
+  element,
+  myDocument,
+  needMyApproval
 }
