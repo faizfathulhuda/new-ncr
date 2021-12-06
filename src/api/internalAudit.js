@@ -8,7 +8,7 @@ const ncrTypeSmkp = async () => {
   const { data } = await request.get('/internalAudit/ncr-types-smkp')
   return data
 }
-const save = form => request.post('/api/internalAudit/save-ncr', form)
+const save = form => request.post('/internalAudit/save-ncr', form)
 
 export default {
   ncrTypeIso,

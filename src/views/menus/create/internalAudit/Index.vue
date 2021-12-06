@@ -10,12 +10,16 @@
           :ncrIsoTypeList="ncrIsoTypeList"
           :ncrSmkpTypeList="ncrSmkpTypeList"
           :isoStandardList="isoStandardList"
+          :elementSMKPList="elementSMKPList"
+          :auditorIsoList="auditorIsoList"
+          :auditorSMKPList="auditorSMKPList"
+          :auditeeList="auditeeList"
         />
       </validation-observer>
     </b-card>
     <div class="d-flex ml-3">
-      <b-button class="mr-3" variant="primary">SUBMIT</b-button>
-      <b-button class="mr-3" variant="outline-primary">SAVE</b-button>
+      <b-button class="mr-3" variant="primary" @click="save">SUBMIT</b-button>
+      <b-button class="mr-3" variant="outline-primary" @click="save">SAVE</b-button>
       <b-button class="mr-3" variant="outline-primary">PRINT</b-button>
       <b-button variant="outline-danger">CLOSE</b-button>
     </div>
@@ -45,29 +49,39 @@ export default {
       FileNCRList: [],
       ISOClauseList: [null],
       SubElementRequestList: [null],
-      AuditorISOList: [null],
-      AuditorSMKPList: [null],
-      AuditeeSMKPList: [null],
-      AuditeeISOList: [null],
-      isoStandard: null,
-      referenceIso: [null],
-      auditorIso: [null],
-      auditorIsoDiv: [null],
-      auditorSmkp: [null],
-      auditorSmkpDiv: [null],
-      auditee: [null],
-      auditeeDiv: [null]
+      AuditorISOList: [{
+        id: JSON.parse(localStorage.getItem('profile')).id,
+        department: JSON.parse(localStorage.getItem('profile')).departemenName,
+        name: JSON.parse(localStorage.getItem('profile')).fullname,
+        siteId: JSON.parse(localStorage.getItem('profile')).workLocationId
+      }],
+      AuditorSMKPList: [{
+        id: JSON.parse(localStorage.getItem('profile')).id,
+        department: JSON.parse(localStorage.getItem('profile')).departemenName,
+        name: JSON.parse(localStorage.getItem('profile')).fullname,
+        siteId: JSON.parse(localStorage.getItem('profile')).workLocationId
+      }],
+      AuditeeSMKPList: null,
+      AuditeeISOList: [null]
     },
     profile: JSON.parse(localStorage.getItem('profile')),
     ncrIsoTypeList: null,
     ncrSmkpTypeList: null,
-    isoStandardList: null
+    isoStandardList: null,
+    elementSMKPList: null,
+    auditorIsoList: null,
+    auditorSMKPList: null,
+    auditeeList: null
   }),
 
   created() {
     this.fetchNcrIsoTypeList()
     this.fetchNcrSmkpTypeList()
     this.fetchIsoStandardList()
+    this.fetchElementList()
+    this.fetchAuditorIsoList()
+    this.fetchAuditorSMKPList()
+    this.fetchAuditeeList()
   },
 
   methods: {
@@ -82,7 +96,30 @@ export default {
     async fetchIsoStandardList() {
       const { data } = await api.isoStandard.list()
       this.isoStandardList = data.isoStandards
-    }
+    },
+    async fetchElementList() {
+      const { data } = await api.element.list()
+      this.elementSMKPList = data.elementSMKPList
+    },
+    async fetchAuditorIsoList() {
+      const { data } = await api.auditor.isoList({
+        siteId: this.profile.workLocationId
+      })
+      this.auditorIsoList = data
+    },
+    async fetchAuditorSMKPList() {
+      const { data } = await api.auditor.smkpList({
+        siteId: this.profile.workLocationId
+      })
+      this.auditorSMKPList = data
+    },
+    async fetchAuditeeList() {
+      const { data } = await api.auditee.list({
+        auditorSiteId: this.profile.workLocationId
+      })
+      this.auditeeList = data
+    },
+    async save() {}
   }
 }
 </script>

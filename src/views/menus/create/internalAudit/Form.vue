@@ -209,18 +209,18 @@
         <span class="font-weight-bold">REFERENCE ISO</span>
         <b-button variant="primary" size="sm" @click="addReferenceIso">ADD +</b-button>
       </div>
-      <b-row v-for="(item, i) of form.referenceIso" :key="i">
+      <b-row v-for="(item, i) of referenceIso" :key="i">
         <b-col>
           <validation-provider name="Reference ISO" rules="required" v-slot="{ errors }">
             <b-form-group
               :invalid-feedback="errors[0]"
             >
               <v-select
-                v-model="form.referenceIso[i]"
+                v-model="referenceIso[i]"
                 label="title"
                 :options="isoStandardList"
                 :reduce="({ id }) => id"
-                @input="onIsoStandardChange(i)"
+                @input="onIsoStandardChange($event, i)"
                 :disabled="isView"
                 :class="{ 'is-invalid': errors.length }"
               />
@@ -235,16 +235,16 @@
               <v-select
                 v-model="form.ISOClauseList[i]"
                 label="title"
-                :options="listIsoClause"
+                :options="listIsoClause[i]"
                 :reduce="({ id }) => id"
-                :disabled="listIsoClause.length === 0"
+                :disabled="listIsoClause[i].length === 0"
                 :class="{ 'is-invalid': errors.length }"
               />
             </b-form-group>
           </validation-provider>
         </b-col>
         <b-col
-          v-if="form.referenceIso.length > 1"
+          v-if="referenceIso.length > 1"
           cols="1"
           class="d-flex justify-content-center pt-2"
         >
@@ -264,16 +264,17 @@
       </div>
       <b-row>
         <b-col>
-          <validation-provider name="Reference ISO" rules="required" v-slot="{ errors }">
+          <validation-provider name="Reference SMKP" rules="required" v-slot="{ errors }">
             <b-form-group
               :invalid-feedback="errors[0]"
             >
               <v-select
-                v-model="form.referenceIso[0]"
-                label="text"
-                :options="options"
-                :reduce="({ value }) => value"
+                v-model="referenceSmkp[0]"
+                label="title"
+                :options="elementSMKPList"
+                :reduce="({ id }) => id"
                 :disabled="isView"
+                @input="onSMKPSElementChange"
                 :class="{ 'is-invalid': errors.length }"
               />
             </b-form-group>
@@ -285,11 +286,11 @@
               :invalid-feedback="errors[0]"
             >
               <v-select
-                v-model="form.subElement"
-                label="text"
-                :options="options"
-                :reduce="({ value }) => value"
-                :disabled="isView"
+                v-model="form.SubElementRequestList[0]"
+                label="title"
+                :options="listSubElement"
+                :reduce="({ id }) => id"
+                :disabled="listSubElement.length === 0"
                 :class="{ 'is-invalid': errors.length }"
               />
             </b-form-group>
@@ -302,17 +303,16 @@
         <span class="font-weight-bold">AUDITOR ISO</span>
         <b-button variant="primary" size="sm" @click="addAuditorIso">ADD +</b-button>
       </div>
-      <b-row v-for="(item, i) of form.auditorIso" :key="i">
+      <b-row v-for="(item, i) of form.AuditorISOList" :key="i">
         <b-col>
           <validation-provider name="Auditor ISO" rules="required" v-slot="{ errors }">
             <b-form-group
               :invalid-feedback="errors[0]"
             >
               <v-select
-                v-model="form.auditorIso[i]"
-                label="text"
-                :options="options"
-                :reduce="({ value }) => value"
+                v-model="form.AuditorISOList[i]"
+                label="name"
+                :options="auditorIsoList"
                 :disabled="isView"
                 :class="{ 'is-invalid': errors.length }"
               />
@@ -322,7 +322,7 @@
         <b-col>
           <b-form-group>
             <b-form-input
-              v-model="form.isotext"
+              :value="i === 0 ? profile.departemenName : form.AuditorISOList[i] ? form.AuditorISOList[i].departemen : 'Division/Department'"
               placeholder="Division/Department"
               disabled
               trim
@@ -331,7 +331,7 @@
           </b-form-group>
         </b-col>
         <b-col
-          v-if="form.auditorIso.length > 1"
+          v-if="form.AuditorISOList.length > 1"
           cols="1"
           class="d-flex justify-content-center pt-2"
         >
@@ -350,17 +350,16 @@
         <span class="font-weight-bold">AUDITOR SMKP</span>
         <b-button variant="primary" size="sm" @click="addAuditorSmkp">ADD +</b-button>
       </div>
-      <b-row v-for="(item, i) of form.auditorSmkp" :key="i">
+      <b-row v-for="(item, i) of form.AuditorSMKPList" :key="i">
         <b-col>
           <validation-provider name="Auditor SMKP" rules="required" v-slot="{ errors }">
             <b-form-group
               :invalid-feedback="errors[0]"
             >
               <v-select
-                v-model="form.auditorSmkp[i]"
-                label="text"
-                :options="options"
-                :reduce="({ value }) => value"
+                v-model="form.AuditorSMKPList[i]"
+                label="name"
+                :options="auditorSMKPList"
                 :disabled="isView"
                 :class="{ 'is-invalid': errors.length }"
               />
@@ -370,7 +369,7 @@
         <b-col>
           <b-form-group>
             <b-form-input
-              v-model="form.isotext"
+              :value="i === 0 ? profile.departemenName : form.AuditorSMKPList[i] ? form.AuditorSMKPList[i].departemen : 'Division/Department'"
               placeholder="Division/Department"
               disabled
               trim
@@ -379,7 +378,7 @@
           </b-form-group>
         </b-col>
         <b-col
-          v-if="form.auditorSmkp.length > 1"
+          v-if="form.AuditorSMKPList.length > 1"
           cols="1"
           class="d-flex justify-content-center pt-2"
         >
@@ -398,17 +397,16 @@
         <span class="font-weight-bold">AUDITEE</span>
         <b-button variant="primary" size="sm" @click="addAuditee">ADD +</b-button>
       </div>
-      <b-row v-for="(item, i) of form.auditee" :key="i">
+      <b-row v-for="(item, i) of form.AuditeeISOList" :key="i">
         <b-col>
-          <validation-provider name="Reference ISO" rules="required" v-slot="{ errors }">
+          <validation-provider name="Auditee" rules="required" v-slot="{ errors }">
             <b-form-group
               :invalid-feedback="errors[0]"
             >
               <v-select
-                v-model="form.auditee[i]"
-                label="text"
-                :options="options"
-                :reduce="({ value }) => value"
+                v-model="form.AuditeeISOList[i]"
+                label="name"
+                :options="auditeeList"
                 :disabled="isView"
                 :class="{ 'is-invalid': errors.length }"
               />
@@ -418,7 +416,7 @@
         <b-col>
           <b-form-group>
             <b-form-input
-              v-model="form.isotext"
+              :value="form.AuditeeISOList[i] ? form.AuditeeISOList[i].departemen : 'Division/Department'"
               placeholder="Division/Department"
               disabled
               trim
@@ -427,7 +425,7 @@
           </b-form-group>
         </b-col>
         <b-col
-          v-if="form.auditee.length > 1"
+          v-if="form.AuditeeISOList.length > 1"
           cols="1"
           class="d-flex justify-content-center pt-2"
         >
@@ -477,6 +475,22 @@ export default {
     isoStandardList: {
       type: Array,
       default: () => ([])
+    },
+    elementSMKPList: {
+      type: Array,
+      default: () => ([])
+    },
+    auditorIsoList: {
+      type: Array,
+      default: () => ([])
+    },
+    auditorSMKPList: {
+      type: Array,
+      default: () => ([])
+    },
+    auditeeList: {
+      type: Array,
+      default: () => ([])
     }
   },
 
@@ -494,7 +508,10 @@ export default {
     ],
     defaultImage: noImage,
     errorFile: '',
-    listIsoClause: []
+    listIsoClause: [[]],
+    listSubElement: [],
+    referenceIso: [null],
+    referenceSmkp: [null]
   }),
 
   methods: {
@@ -522,37 +539,49 @@ export default {
       return `${this.form.FileNCRList.length} file(s) selected`
     },
     addReferenceIso() {
-      this.form.referenceIso.push(null)
+      this.form.ISOClauseList.push(null)
+      this.referenceIso.push(null)
+      this.listIsoClause.push([])
     },
     removeReferenceIso(index) {
-      this.form.referenceIso.splice(index, 1)
+      this.form.ISOClauseList.splice(index, 1)
+      this.referenceIso.splice(index, 1)
+      this.listIsoClause.splice(index, 1)
     },
-    onIsoStandardChange(index) {
-      this.listIsoClause = this.isoStandardList[index].clauseList
+    onIsoStandardChange(id, i) {
+      if (id) {
+        const index = this.isoStandardList.findIndex(v => v.id === id)
+        this.listIsoClause[i] = this.isoStandardList[index].clauseList
+      } else {
+        this.listIsoClause[i] = []
+        this.form.ISOClauseList[i] = null
+      }
     },
     addAuditorIso() {
-      this.form.auditorIso.push(null)
-      this.form.auditorIsoDiv.push(null)
+      this.form.AuditorISOList.push(null)
     },
     removeAuditorIso(index) {
-      this.form.auditorIso.splice(index, 1)
-      this.form.auditorIsoDiv.splice(index, 1)
+      this.form.AuditorISOList.splice(index, 1)
+    },
+    onSMKPSElementChange(id) {
+      if (id) {
+        const index = this.elementSMKPList.findIndex(v => v.id === id)
+        this.listSubElement = this.elementSMKPList[index].subElementList
+      } else {
+        this.listSubElement = []
+      }
     },
     addAuditorSmkp() {
-      this.form.auditorSmkp.push(null)
-      this.form.auditorSmkpDiv.push(null)
+      this.form.AuditorSMKPList.push(null)
     },
     removeAuditorSmkp(index) {
-      this.form.auditorSmkp.splice(index, 1)
-      this.form.auditorSmkpDiv.splice(index, 1)
+      this.form.AuditorSMKPList.splice(index, 1)
     },
     addAuditee() {
-      this.form.auditee.push(null)
-      this.form.auditeeDiv.push(null)
+      this.form.AuditeeISOList.push(null)
     },
     removeAuditee(index) {
-      this.form.auditee.splice(index, 1)
-      this.form.auditeeDiv.splice(index, 1)
+      this.form.AuditeeISOList.splice(index, 1)
     }
   }
 }

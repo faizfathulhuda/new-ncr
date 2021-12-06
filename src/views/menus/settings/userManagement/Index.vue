@@ -74,7 +74,7 @@
           <b-form-input
             v-model="keyword"
             placeholder="Search..."
-            @input="$refs.table.$refs.table.refresh()"
+            @change="$refs.table.$refs.table.refresh()"
           ></b-form-input>
         </b-form-group>
       </b-col>
@@ -293,8 +293,6 @@ export default {
 .card {
   width: 100%;
   margin: auto;
-  box-shadow: 17px 20px 40px 0 rgba(233, 234, 241, 0.36);
-  border: none;
   border-radius: 24px;
 
   .card-header {
