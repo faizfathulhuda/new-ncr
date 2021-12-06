@@ -277,12 +277,6 @@ export default {
     },
     onMouseLeave() {
       if (!this.locked) this.$emit('expand', false)
-    },
-    onClick() {
-      console.log('focus')
-    },
-    onBlur() {
-      console.log('blur')
     }
   }
 }

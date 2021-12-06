@@ -351,7 +351,6 @@ export default {
     async onFilePicked(ev) {
       const input = ev.length ? ev : ev.target.files
       if ((this.form.evidence.length + input.length) < 4) {
-        console.log(input)
         for (const file of input) {
           const itemIds = this.form.evidence.length ? this.form.evidence.map(({ id }) => id) : [0]
           const fileId = Math.max(...itemIds) + 1

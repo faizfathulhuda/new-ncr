@@ -201,7 +201,6 @@ export default {
     async fetchDocuments() {
       const user = JSON.parse(localStorage.getItem('profile'))
       const sortNumber = this.getSortNumber(this.sortBy, this.sortDesc)
-      console.log(sortNumber)
       const { data } = await api.needMyApproval.list({
         userId: user.id,
         currentPage: this.currentPage,
@@ -224,8 +223,6 @@ export default {
           status: a.status
         }
       })
-
-      console.log(this.items)
 
       this.totalRows = data.lengthData
 
