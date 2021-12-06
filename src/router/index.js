@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+// for implement permission menu
 // import { hasPermission } from '@/utils/permissions'
 import dashboard from './dashboard'
 import externalAudit from './externalAudit'
